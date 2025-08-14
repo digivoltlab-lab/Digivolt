@@ -3,39 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digivolt</title>
+    <title>Digivolt - Listings</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #4facfe, #00f2fe);
-            text-align: center;
-            padding: 50px;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #4facfe;
             color: white;
+            padding: 20px;
+            text-align: center;
         }
         h1 {
-            font-size: 50px;
-            margin-bottom: 10px;
+            margin: 0;
         }
-        p {
-            font-size: 20px;
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+        }
+        .listing {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        }
+        .listing h2 {
+            margin: 0 0 10px;
+        }
+        .listing p {
+            margin: 0 0 10px;
+        }
+        .price {
+            color: green;
+            font-weight: bold;
         }
         .btn {
-            background: white;
-            color: #4facfe;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 5px;
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4facfe;
+            color: white;
             text-decoration: none;
-            font-size: 18px;
+            border-radius: 5px;
         }
         .btn:hover {
-            background: #f0f0f0;
+            background: #3a8fd0;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to Digivolt</h1>
-    <p>Your tech hub for electronics, coding, and innovation.</p>
-    <a class="btn" href="#">Explore Now</a>
+    <header>
+        <h1>Digivolt Listings</h1>
+        <p>Your tech marketplace</p>
+    </header>
+    <div class="container">
+
+        <div class="listing">
+            <h2>Arduino Uno R3</h2>
+            <p>High-quality microcontroller board for electronics projects.</p>
+            <p class="price">₹550</p>
+            <a class="btn" href="#">Buy Now</a>
+        </div>
+
+        <div class="listing">
+            <h2>Raspberry Pi 4</h2>
+            <p>Mini computer for coding, IoT, and robotics.</p>
+            <p class="price">₹4,200</p>
+            <a class="btn" href="#">Buy Now</a>
+        </div>
+
+        <div class="listing">
+            <h2>ESP8266 WiFi Module</h2>
+            <p>Wireless module for IoT projects.</p>
+            <p class="price">₹250</p>
+            <a class="btn" href="#">Buy Now</a>
+        </div>
+
+    </div>
 </body>
 </html>
