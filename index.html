@@ -1,59 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Select Product | Digivolt</title>
-  <style>
-    body{font-family:Arial, sans-serif;background:#f5f5f5;margin:0;padding:0;}
-    .wrap{max-width:500px;margin:60px auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,0.1);}
-    h1{text-align:center;margin-bottom:20px;}
-    select,input,button{width:100%;padding:10px;margin-bottom:15px;border-radius:5px;border:1px solid #ccc;}
-    button{background:#4facfe;color:white;border:none;cursor:pointer;}
-    button:hover{background:#3a8fd0;}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digivolt - Listings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #4facfe;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+        }
+        .listing {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        }
+        .listing h2 {
+            margin: 0 0 10px;
+        }
+        .listing p {
+            margin: 0 0 10px;
+        }
+        .price {
+            color: green;
+            font-weight: bold;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4facfe;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background: #3a8fd0;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>Digivolt Listings</h1>
+        <p>Your tech marketplace</p>
+    </header>
+    <div class="container">
 
-<div class="wrap">
-  <h1>Select Your Product</h1>
-  <form id="selectForm">
-    <label for="product">Choose Product:</label>
-    <select id="product" name="product" required>
-      <option value="" disabled selected>Select a product</option>
-      <option value="Arduino Uno R3|550">Arduino Uno R3 - ₹550</option>
-      <option value="Raspberry Pi 4|4200">Raspberry Pi 4 - ₹4,200</option>
-      <option value="Resisters (1k),100 pic|109">Resisters (1k), 100 pic - ₹109</option>
-      <option value="ESP8266 WiFi Module|250">ESP8266 WiFi Module - ₹250</option>
-    </select>
+        <div class="listing">
+            <h2>Arduino Uno R3</h2>
+            <p>High-quality microcontroller board for electronics projects.</p>
+            <p class="price">₹550</p>
+            <a class="btn" href="#">Add to Cart</a>
+        </div>
 
-    <label for="name">Your Name:</label>
-    <input type="text" id="name" name="name" required>
+        <div class="listing">
+            <h2>Raspberry Pi 4</h2>
+            <p>Mini computer for coding, IoT, and robotics.</p>
+            <p class="price">₹4,200</p>
+            <a class="btn" href="#">Add to Cart</a>
+        </div>
 
-    <label for="email">Your Email:</label>
-    <input type="email" id="email" name="email" required>
+        <div class="listing">
+            <h2>Resisters (1k),100 pic </h2>
+            <p>Mini computer for coding, IoT, and robotics.</p>
+            <p class="price">₹109</p>
+            <a class="btn" href="#">Add to Cart</a>
+        </div>
 
-    <button type="submit">Proceed to Payment</button>
-  </form>
-</div>
+        <div class="listing">
+            <h2>ESP8266 WiFi Module</h2>
+            <p>Wireless module for IoT projects.</p>
+            <p class="price">₹250</p>
+            <a class="btn" href="#">Add to Cart</a>
+        </div>
 
-<script>
-document.getElementById("selectForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  const [productName, price] = document.getElementById("product").value.split("|");
-  const name  = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-
-  // Redirect to payment page with product info
-  const params = new URLSearchParams({
-    product: productName,
-    price: price,
-    name: name,
-    email: email
-  });
-  window.location.href = "payment.html?" + params.toString();
-});
-</script>
-
+    </div>
 </body>
 </html>
+
