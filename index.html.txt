@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digivolt - Listings</title>
+<style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
+    header { background: #4facfe; color: white; padding: 20px; text-align: center; position: relative; }
+    h1 { margin: 0; }
+    .container { max-width: 1000px; margin: auto; padding: 20px; }
+    .listing { background: white; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0px 2px 5px rgba(0,0,0,0.1); }
+    .listing h2 { margin: 0 0 10px; }
+    .listing p { margin: 0 0 10px; }
+    .price { color: green; font-weight: bold; }
+    .btn { display: inline-block; padding: 10px 20px; background: #4facfe; color: white; text-decoration: none; border-radius: 5px; cursor: pointer; }
+    .btn:hover { background: #3a8fd0; }
+    .buy-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: #ff9800; }
+    .buy-btn:hover { background: #e68900; }
+</style>
+</head>
+<body>
+<header>
+    <h1>Digivolt Listings</h1>
+    <p>Your tech marketplace</p>
+    <a href="cart.html" class="btn buy-btn">Buy</a>
+</header>
+<div class="container">
+
+    <div class="listing">
+        <h2>Arduino Uno R3</h2>
+        <p>High-quality microcontroller board for electronics projects.</p>
+        <p class="price">₹550</p>
+        <button class="btn" onclick="addToCart('Arduino Uno R3', 550)">Add to Cart</button>
+    </div>
+
+    <div class="listing">
+        <h2>Raspberry Pi 4</h2>
+        <p>Mini computer for coding, IoT, and robotics.</p>
+        <p class="price">₹4200</p>
+        <button class="btn" onclick="addToCart('Raspberry Pi 4', 4200)">Add to Cart</button>
+    </div>
+
+    <div class="listing">
+        <h2>Resisters (1k), 100 pcs</h2>
+        <p>Pack of resistors for electronics projects.</p>
+        <p class="price">₹109</p>
+        <button class="btn" onclick="addToCart('Resisters (1k), 100 pcs', 109)">Add to Cart</button>
+    </div>
+
+    <div class="listing">
+        <h2>ESP8266 WiFi Module</h2>
+        <p>Wireless module for IoT projects.</p>
+        <p class="price">₹250</p>
+        <button class="btn" onclick="addToCart('ESP8266 WiFi Module', 250)">Add to Cart</button>
+    </div>
+
+</div>
+
+<script>
+function addToCart(productName, price) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.push({ name: productName, price: price });
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert(productName + " added to cart!");
+}
+</script>
+</body>
+</html>
