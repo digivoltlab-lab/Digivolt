@@ -132,16 +132,6 @@
             <button class="minus-btn" onclick="decrease(this)">-</button>
         </div>
     </div>
-    <div class="card">
-        <h2>ESP8266 WiFi Module</h2>
-        <p>Wireless module for IoT projects.</p>
-        <p class="price">₹250</p>
-        <div class="controls">
-            <button class="plus-btn" onclick="increase(this)">+</button>
-            <span class="count">0</span>
-            <button class="minus-btn" onclick="decrease(this)">-</button>
-        </div>
-    </div>
 </div>
 
 <script>
@@ -170,6 +160,7 @@ document.querySelector('.buy-btn').addEventListener('click', function () {
             cart.push({
                 name: name,
                 qty: count,
+                price: price,
                 total: price * count
             });
         }
@@ -178,14 +169,8 @@ document.querySelector('.buy-btn').addEventListener('click', function () {
     if (cart.length === 0) {
         alert("No items selected!");
     } else {
-        let message = "🛒 Your Cart:\n";
-        let grandTotal = 0;
-        cart.forEach(p => {
-            message += `${p.name} - ${p.qty} pcs = ₹${p.total}\n`;
-            grandTotal += p.total;
-        });
-        message += `\n💰 Grand Total = ₹${grandTotal}`;
-        alert(message);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        window.location.href = 'cart.html';
     }
 });
 </script>
