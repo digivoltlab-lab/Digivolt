@@ -19,6 +19,18 @@
         box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
     h1 { margin: 0; }
+    .search-box {
+        margin-top: 10px;
+    }
+    .search-box input {
+        width: 80%;
+        max-width: 400px;
+        padding: 8px;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        font-size: 16px;
+    }
     .container { 
         max-width: 1200px; 
         margin: auto; 
@@ -46,6 +58,7 @@
         object-fit: cover;
         border-radius: 10px;
         margin-bottom: 10px;
+        cursor: pointer;
     }
     .listing h2 { margin: 0 0 10px; color: #01579b; font-size: 1.2em; }
     .listing p { margin: 0 0 10px; color: #555; font-size: 0.95em; }
@@ -88,6 +101,34 @@
     .btn-remove { background: #f44336; }
     .btn-remove:hover { background: #d32f2f; }
 
+    /* Modal for image zoom */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.8);
+    }
+    .modal-content {
+        display: block;
+        margin: 5% auto;
+        max-width: 90%;
+        border-radius: 10px;
+    }
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
     /* 📱 Mobile adjustments */
     @media (max-width: 600px) {
         header { padding: 15px; }
@@ -108,9 +149,13 @@
 <header>
     <h1>Digivolt Listings</h1>
     <p>Your tech marketplace</p>
+    <div class="search-box">
+        <input type="text" id="search" placeholder="Search products..." onkeyup="filterProducts()">
+    </div>
     <a href="cart.html" class="btn buy-btn">Buy</a>
 </header>
-<div class="container">
+
+<div class="container" id="product-list">
 
     <div class="listing">
         <img src="Arduino.jpg.jpg" alt="Arduino Uno R3">
@@ -137,21 +182,27 @@
         <h2>Resisters (1k), 100 pcs</h2>
         <p>Pack of resistors for electronics projects.</p>
         <p class="price">₹40</p>
-        <button class="btn" onclick="addToCart('Resisters (1k), 100 pcs', 109)">+</button>
+        <button class="btn" onclick="addToCart('Resisters (1k), 100 pcs', 40)">+</button>
         <span class="counter" id="counter-Resisters (1k), 100 pcs">0</span>
         <button class="btn btn-remove" onclick="removeFromCart('Resisters (1k), 100 pcs')">-</button>
     </div>
 
     <div class="listing">
-        <img src="esp.png" alt="Arduino Uno R3">
+        <img src="esp.png" alt="ESP8266 WiFi Module">
         <h2>ESP8266 WiFi Module</h2>
         <p>Wireless module for IoT projects.</p>
         <p class="price">₹140</p>
-        <button class="btn" onclick="addToCart('ESP8266 WiFi Module', 250)">+</button>
+        <button class="btn" onclick="addToCart('ESP8266 WiFi Module', 140)">+</button>
         <span class="counter" id="counter-ESP8266 WiFi Module">0</span>
         <button class="btn btn-remove" onclick="removeFromCart('ESP8266 WiFi Module')">-</button>
     </div>
 
+</div>
+
+<!-- Modal -->
+<div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
 </div>
 
 <script>
@@ -191,6 +242,34 @@ function removeFromCart(productName) {
         localStorage.setItem('cart', JSON.stringify(cart));
         document.getElementById('counter-' + productName).textContent = existingItem.quantity > 0 ? existingItem.quantity : 0;
     }
+}
+
+// 🔍 Search filter
+function filterProducts() {
+    let input = document.getElementById('search').value.toLowerCase();
+    let listings = document.querySelectorAll('.listing');
+
+    listings.forEach(item => {
+        let title = item.querySelector('h2').textContent.toLowerCase();
+        let desc = item.querySelector('p').textContent.toLowerCase();
+        if (title.includes(input) || desc.includes(input)) {
+            item.style.display = "";
+        } else {
+            item.style.display = "none";
+        }
+    });
+}
+
+// 📷 Image click zoom
+document.querySelectorAll('.listing img').forEach(img => {
+    img.addEventListener('click', function() {
+        document.getElementById('imageModal').style.display = "block";
+        document.getElementById('modalImage').src = this.src;
+    });
+});
+
+function closeModal() {
+    document.getElementById('imageModal').style.display = "none";
 }
 
 window.onload = loadCounters;
