@@ -1,153 +1,698 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Digivolt - Listings</title>
 <style>
-    body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #e0f7fa, #e3f2fd); margin: 0; padding: 0; }
-    header { background: #0288d1; color: white; padding: 20px; text-align: center; position: relative; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
-    h1 { margin: 0; }
-    .search-box { margin-top: 10px; }
-    .search-box input { width: 80%; max-width: 400px; padding: 8px; border-radius: 5px; border: none; outline: none; font-size: 16px; }
-    .container { max-width: 1200px; margin: auto; padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-    .listing { background: white; padding: 15px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); border-left: 5px solid #4cafef; transition: transform 0.2s; text-align: center; }
-    .listing:hover { transform: scale(1.02); border-left-color: #00c853; }
-    .listing img { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; cursor: pointer; }
-    .listing h2 { margin: 0 0 10px; color: #01579b; font-size: 1.2em; }
-    .listing p { margin: 0 0 10px; color: #555; font-size: 0.95em; }
-    .price { color: green; font-weight: bold; font-size: 1.1em; }
-    .btn { display: inline-block; width: 40px; height: 40px; background: #4cafef; color: white; font-size: 20px; text-align: center; line-height: 40px; text-decoration: none; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; }
-    .btn:hover { background: #3a8fd0; }
-    .counter { display: inline-block; background: #2196F3; color: white; padding: 5px 10px; margin: 0 10px; border-radius: 50%; font-weight: bold; min-width: 28px; text-align: center; }
-    .btn-remove { background: #f44336; }
-    .btn-remove:hover { background: #d32f2f; }
-    .buy-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: linear-gradient(45deg, #ff5722, #ff9800); padding: 12px 25px; border-radius: 50px; font-size: 18px; font-weight: bold; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.3); color: white; transition: all 0.3s ease; }
-    .buy-btn:hover { background: linear-gradient(45deg, #ff9800, #ff5722); transform: translateY(-50%) scale(1.05); box-shadow: 0 6px 15px rgba(0,0,0,0.4); }
-    .category-title { grid-column: 1 / -1; background: #01579b; color: white; padding: 10px; border-radius: 5px; font-size: 1.2em; position: sticky; top: 0; z-index: 5; }
-    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8); }
-    .modal-content { display: block; margin: 5% auto; max-width: 90%; border-radius: 10px; }
-    .close { position: absolute; top: 20px; right: 35px; color: white; font-size: 40px; font-weight: bold; cursor: pointer; }
-    @media (max-width: 600px) {
-        header { padding: 15px; }
-        .buy-btn { position: static; display: block; margin: 10px auto 0; transform: none; text-align: center; }
-        .listing img { height: 150px; }
-    }
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #e0f7fa, #e3f2fd);
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    background: #0288d1;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+  h1 { margin: 0; }
+  .search-box { margin-top: 10px; }
+  .search-box input {
+    width: 80%;
+    max-width: 420px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+  }
+
+  /* Category filter chips */
+  .filters {
+    margin: 12px auto 0;
+    display: flex;
+    gap: 10px;
+    padding: 8px 16px;
+    overflow-x: auto;
+    max-width: 1200px;
+    scrollbar-width: thin;
+  }
+  .chip {
+    flex: 0 0 auto;
+    border: 1px solid #90caf9;
+    background: #e3f2fd;
+    color: #01579b;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .chip:hover { background: #bbdefb; }
+  .chip.active {
+    background: #0288d1;
+    border-color: #0288d1;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    gap: 20px;
+  }
+  .listing {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-left: 5px solid #4cafef;
+    transition: transform .2s;
+    text-align: center;
+  }
+  .listing:hover { transform: scale(1.02); border-left-color: #00c853; }
+  .listing img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    background: #f5f5f5;
+  }
+  .listing h2 { margin: 0 0 8px; color: #01579b; font-size: 1.1em; }
+  .listing p { margin: 0 0 10px; color: #555; font-size: .95em; }
+  .price { color: green; font-weight: bold; font-size: 1.05em; }
+
+  .btn {
+    display: inline-block;
+    width: 40px; height: 40px;
+    background: #4cafef; color: white;
+    font-size: 20px; text-align: center; line-height: 40px;
+    text-decoration: none;
+    border-radius: 8px; cursor: pointer; border: none; font-weight: bold;
+  }
+  .btn:hover { background: #3a8fd0; }
+  .btn-remove { background: #f44336; }
+  .btn-remove:hover { background: #d32f2f; }
+  .counter {
+    display: inline-block;
+    background: #2196F3; color: white;
+    padding: 5px 10px; margin: 0 10px;
+    border-radius: 50%;
+    font-weight: bold; min-width: 28px; text-align: center;
+  }
+
+  /* Highlighted NEXT button */
+  .buy-btn {
+    position: fixed;
+    right: 16px; bottom: 16px;
+    background: linear-gradient(45deg,#ff5722,#ff9800);
+    padding: 14px 26px;
+    border-radius: 50px;
+    font-size: 18px; font-weight: bold; text-transform: uppercase;
+    box-shadow: 0 10px 16px rgba(0,0,0,.25);
+    color: white; transition: all .3s ease;
+    text-decoration: none;
+    z-index: 20;
+  }
+  .buy-btn:hover { transform: scale(1.05); }
+
+  /* Modal for image zoom */
+  .modal {
+    display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+    width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8);
+  }
+  .modal-content {
+    display: block; margin: 5% auto; max-width: 90%; border-radius: 10px;
+  }
+  .close {
+    position: absolute; top: 20px; right: 35px; color: white;
+    font-size: 40px; font-weight: bold; cursor: pointer;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 15px; }
+    .listing img { height: 150px; }
+    .filters { padding: 8px 12px; }
+  }
 </style>
 </head>
 <body>
+
 <header>
-    <h1>Digivolt Listings</h1>
-    <p>Your tech marketplace</p>
-    <div class="search-box">
-        <input type="text" id="search" placeholder="Search products..." onkeyup="filterProducts()">
-    </div>
-    <a href="cart.html" class="btn buy-btn">Next</a>
+  <h1>Digivolt Listings</h1>
+  <p>Your tech marketplace</p>
+  <div class="search-box">
+    <input type="text" id="search" placeholder="Search products..." onkeyup="applyFilters()" />
+  </div>
+
+  <!-- Category chips -->
+  <div class="filters" id="filters">
+    <span class="chip active" data-cat="All">All</span>
+    <span class="chip" data-cat="Modules">Modules</span>
+    <span class="chip" data-cat="PCBs & Prototyping">PCBs & Prototyping</span>
+    <span class="chip" data-cat="Tools">Tools</span>
+    <span class="chip" data-cat="Wires & Accessories">Wires & Accessories</span>
+    <span class="chip" data-cat="Resistors">Resistors</span>
+    <span class="chip" data-cat="Diodes & Transistors">Diodes & Transistors</span>
+    <span class="chip" data-cat="Capacitors & Pots">Capacitors & Pots</span>
+    <span class="chip" data-cat="ICs & Displays">ICs & Displays</span>
+    <span class="chip" data-cat="Sensors">Sensors</span>
+    <span class="chip" data-cat="LEDs">LEDs</span>
+    <span class="chip" data-cat="Packaging & Storage">Packaging & Storage</span>
+    <span class="chip" data-cat="Services">Services</span>
+  </div>
 </header>
 
+<a href="cart.html" class="buy-btn">Next</a>
+
 <div class="container" id="product-list">
+  <!-- ========= 4 Existing (paths unchanged) ========= -->
+  <div class="listing" data-category="Modules">
+    <img src="Arduino.jpg.jpg" alt="Arduino Uno R3">
+    <h2>Arduino Uno R3</h2>
+    <p>High-quality microcontroller board for electronics projects.</p>
+    <p class="price">₹310</p>
+    <button class="btn" onclick="addToCart('Arduino Uno R3', 310)">+</button>
+    <span class="counter" id="counter-Arduino Uno R3">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('Arduino Uno R3')">-</button>
+  </div>
 
-    <!-- 🟦 Modules -->
-    <div class="category-title">Modules</div>
-    <div class="listing">
-        <img src="Arduino.jpg.jpg" alt="Arduino Uno R3">
-        <h2>Arduino Uno R3</h2>
-        <p>High-quality microcontroller board for electronics projects.</p>
-        <p class="price">₹310</p>
-        <button class="btn" onclick="addToCart('Arduino Uno R3', 310)">+</button>
-        <span class="counter" id="counter-Arduino Uno R3">0</span>
-        <button class="btn btn-remove" onclick="removeFromCart('Arduino Uno R3')">-</button>
-    </div>
-    <div class="listing">
-        <img src="RaspberryPi.jpg" alt="Raspberry Pi 0">
-        <h2>Raspberry Pi 0</h2>
-        <p>Mini computer for coding, IoT, and robotics.</p>
-        <p class="price">₹920</p>
-        <button class="btn" onclick="addToCart('Raspberry Pi 0', 920)">+</button>
-        <span class="counter" id="counter-Raspberry Pi 0">0</span>
-        <button class="btn btn-remove" onclick="removeFromCart('Raspberry Pi 0')">-</button>
-    </div>
-    <div class="listing">
-        <img src="esp.png" alt="ESP8266 WiFi Module">
-        <h2>ESP8266 WiFi Module</h2>
-        <p>Wireless module for IoT projects.</p>
-        <p class="price">₹140</p>
-        <button class="btn" onclick="addToCart('ESP8266 WiFi Module', 140)">+</button>
-        <span class="counter" id="counter-ESP8266 WiFi Module">0</span>
-        <button class="btn btn-remove" onclick="removeFromCart('ESP8266 WiFi Module')">-</button>
-    </div>
-    <div class="listing">
-        <img src="" alt="Bluetooth Module HC-05">
-        <h2>Bluetooth Module HC-05</h2>
-        <p>Wireless Bluetooth module for Arduino and microcontrollers.</p>
-        <p class="price">₹180</p>
-        <button class="btn" onclick="addToCart('Bluetooth Module HC-05', 180)">+</button>
-        <span class="counter" id="counter-Bluetooth Module HC-05">0</span>
-        <button class="btn btn-remove" onclick="removeFromCart('Bluetooth Module HC-05')">-</button>
-    </div>
-    <div class="listing">
-        <img src="" alt="Relay Module 5V">
-        <h2>Relay Module 5V</h2>
-        <p>Single channel relay module for switching applications.</p>
-        <p class="price">₹95</p>
-        <button class="btn" onclick="addToCart('Relay Module 5V', 95)">+</button>
-        <span class="counter" id="counter-Relay Module 5V">0</span>
-        <button class="btn btn-remove" onclick="removeFromCart('Relay Module 5V')">-</button>
-    </div>
+  <div class="listing" data-category="Modules">
+    <img src="RaspberryPi.jpg" alt="Raspberry Pi 0">
+    <h2>Raspberry Pi 0</h2>
+    <p>Mini computer for coding, IoT, and robotics.</p>
+    <p class="price">₹920</p>
+    <button class="btn" onclick="addToCart('Raspberry Pi 0', 920)">+</button>
+    <span class="counter" id="counter-Raspberry Pi 0">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('Raspberry Pi 0')">-</button>
+  </div>
 
-    <!-- बाकी categories यहाँ इसी format में आएँगी... -->
+  <div class="listing" data-category="Resistors">
+    <img src="Resistors.jpg" alt="Resisters (1k), 100 pcs">
+    <h2>Resisters (1k), 100 pcs</h2>
+    <p>Pack of resistors for electronics projects.</p>
+    <p class="price">₹40</p>
+    <button class="btn" onclick="addToCart('Resisters (1k), 100 pcs', 40)">+</button>
+    <span class="counter" id="counter-Resisters (1k), 100 pcs">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('Resisters (1k), 100 pcs')">-</button>
+  </div>
 
+  <div class="listing" data-category="Modules">
+    <img src="esp.png" alt="ESP8266 WiFi Module">
+    <h2>ESP8266 WiFi Module</h2>
+    <p>Wireless module for IoT projects.</p>
+    <p class="price">₹140</p>
+    <button class="btn" onclick="addToCart('ESP8266 WiFi Module', 140)">+</button>
+    <span class="counter" id="counter-ESP8266 WiFi Module">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('ESP8266 WiFi Module')">-</button>
+  </div>
+
+  <!-- ========= Remaining 38 items (src left blank) ========= -->
+
+  <!-- PCBs & Prototyping -->
+  <div class="listing" data-category="PCBs & Prototyping">
+    <img src="" alt="Breadboard WISH WB 150">
+    <h2>Breadboard WISH WB 150</h2>
+    <p>Standard solderless breadboard.</p>
+    <p class="price">₹85</p>
+    <button class="btn" onclick="addToCart('Breadboard WISH WB 150', 85)">+</button>
+    <span class="counter" id="counter-Breadboard WISH WB 150">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('Breadboard WISH WB 150')">-</button>
+  </div>
+
+  <!-- Tools -->
+  <div class="listing" data-category="Tools">
+    <img src="" alt="Wire Stripper EGO 150B">
+    <h2>Wire Stripper EGO 150B</h2>
+    <p>Tool for stripping wire insulation.</p>
+    <p class="price">₹180</p>
+    <button class="btn" onclick="addToCart('Wire Stripper EGO 150B', 180)">+</button>
+    <span class="counter" id="counter-Wire Stripper EGO 150B">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('Wire Stripper EGO 150B')">-</button>
+  </div>
+
+  <!-- Wires & Accessories -->
+  <div class="listing" data-category="Wires & Accessories">
+    <img src="" alt="Berg Wires F-F">
+    <h2>Berg Wires F-F</h2>
+    <p>Female to Female jumper wires.</p>
+    <p class="price">₹35</p>
+    <button class="btn" onclick="addToCart('Berg Wires F-F', 35)">+</button>
+    <span class="counter" id="counter-Berg Wires F-F">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('Berg Wires F-F')">-</button>
+  </div>
+
+  <div class="listing" data-category="Wires & Accessories">
+    <img src="" alt="Berg Wires M-M">
+    <h2>Berg Wires M-M</h2>
+    <p>Male to Male jumper wires.</p>
+    <p class="price">₹35</p>
+    <button class="btn" onclick="addToCart('Berg Wires M-M', 35)">+</button>
+    <span class="counter" id="counter-Berg Wires M-M">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('Berg Wires M-M')">-</button>
+  </div>
+
+  <div class="listing" data-category="Wires & Accessories">
+    <img src="" alt="Berg Wires M-F">
+    <h2>Berg Wires M-F</h2>
+    <p>Male to Female jumper wires.</p>
+    <p class="price">₹35</p>
+    <button class="btn" onclick="addToCart('Berg Wires M-F', 35)">+</button>
+    <span class="counter" id="counter-Berg Wires M-F">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('Berg Wires M-F')">-</button>
+  </div>
+
+  <div class="listing" data-category="Wires & Accessories">
+    <img src="" alt="1m Single Strand Wires (R,B,B,G,Y)">
+    <h2>1m Single Strand Wires (R,B,B,G,Y)</h2>
+    <p>Single strand hookup wires, assorted colors.</p>
+    <p class="price">₹20</p>
+    <button class="btn" onclick="addToCart('1m Single Strand Wires (R,B,B,G,Y)', 20)">+</button>
+    <span class="counter" id="counter-1m Single Strand Wires (R,B,B,G,Y)">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('1m Single Strand Wires (R,B,B,G,Y)')">-</button>
+  </div>
+
+  <div class="listing" data-category="Wires & Accessories">
+    <img src="" alt="MULTI STRAND WIRE">
+    <h2>MULTI STRAND WIRE</h2>
+    <p>Flexible multi-strand wire.</p>
+    <p class="price">₹25</p>
+    <button class="btn" onclick="addToCart('MULTI STRAND WIRE', 25)">+</button>
+    <span class="counter" id="counter-MULTI STRAND WIRE">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('MULTI STRAND WIRE')">-</button>
+  </div>
+
+  <!-- Resistors -->
+  <div class="listing" data-category="Resistors">
+    <img src="" alt="Resistor 15KOHM 1/4 Watt MFR">
+    <h2>Resistor 15KOHM 1/4 Watt MFR</h2>
+    <p>15kΩ 0.25W metal film resistor.</p>
+    <p class="price">₹4</p>
+    <button class="btn" onclick="addToCart('Resistor 15KOHM 1/4 Watt MFR', 4)">+</button>
+    <span class="counter" id="counter-Resistor 15KOHM 1/4 Watt MFR">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('Resistor 15KOHM 1/4 Watt MFR')">-</button>
+  </div>
+
+  <div class="listing" data-category="Resistors">
+    <img src="" alt="1k ohm resistor">
+    <h2>1k ohm resistor</h2>
+    <p>1kΩ through-hole resistor.</p>
+    <p class="price">₹3</p>
+    <button class="btn" onclick="addToCart('1k ohm resistor', 3)">+</button>
+    <span class="counter" id="counter-1k ohm resistor">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('1k ohm resistor')">-</button>
+  </div>
+
+  <div class="listing" data-category="Resistors">
+    <img src="" alt="10k ohm resistor">
+    <h2>10k ohm resistor</h2>
+    <p>10kΩ through-hole resistor.</p>
+    <p class="price">₹3</p>
+    <button class="btn" onclick="addToCart('10k ohm resistor', 3)">+</button>
+    <span class="counter" id="counter-10k ohm resistor">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('10k ohm resistor')">-</button>
+  </div>
+
+  <div class="listing" data-category="Resistors">
+    <img src="" alt="100k ohm resistor">
+    <h2>100k ohm resistor</h2>
+    <p>100kΩ through-hole resistor.</p>
+    <p class="price">₹4</p>
+    <button class="btn" onclick="addToCart('100k ohm resistor', 4)">+</button>
+    <span class="counter" id="counter-100k ohm resistor">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('100k ohm resistor')">-</button>
+  </div>
+
+  <div class="listing" data-category="Resistors">
+    <img src="" alt="220k ohm resistor">
+    <h2>220k ohm resistor</h2>
+    <p>220kΩ through-hole resistor.</p>
+    <p class="price">₹4</p>
+    <button class="btn" onclick="addToCart('220k ohm resistor', 4)">+</button>
+    <span class="counter" id="counter-220k ohm resistor">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('220k ohm resistor')">-</button>
+  </div>
+
+  <div class="listing" data-category="Resistors">
+    <img src="" alt="330k ohm resistor">
+    <h2>330k ohm resistor</h2>
+    <p>330kΩ through-hole resistor.</p>
+    <p class="price">₹5</p>
+    <button class="btn" onclick="addToCart('330k ohm resistor', 5)">+</button>
+    <span class="counter" id="counter-330k ohm resistor">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('330k ohm resistor')">-</button>
+  </div>
+
+  <!-- Diodes & Transistors -->
+  <div class="listing" data-category="Diodes & Transistors">
+    <img src="" alt="Diode IN4007">
+    <h2>Diode IN4007</h2>
+    <p>General purpose rectifier diode.</p>
+    <p class="price">₹2</p>
+    <button class="btn" onclick="addToCart('Diode IN4007', 2)">+</button>
+    <span class="counter" id="counter-Diode IN4007">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('Diode IN4007')">-</button>
+  </div>
+
+  <div class="listing" data-category="Diodes & Transistors">
+    <img src="" alt="Zener diode 3.6 V">
+    <h2>Zener diode 3.6 V</h2>
+    <p>3.6V zener reference diode.</p>
+    <p class="price">₹3</p>
+    <button class="btn" onclick="addToCart('Zener diode 3.6 V', 3)">+</button>
+    <span class="counter" id="counter-Zener diode 3.6 V">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('Zener diode 3.6 V')">-</button>
+  </div>
+
+  <div class="listing" data-category="Diodes & Transistors">
+    <img src="" alt="MOSFET IRF 640">
+    <h2>MOSFET IRF 640</h2>
+    <p>N-channel MOSFET.</p>
+    <p class="price">₹35</p>
+    <button class="btn" onclick="addToCart('MOSFET IRF 640', 35)">+</button>
+    <span class="counter" id="counter-MOSFET IRF 640">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('MOSFET IRF 640')">-</button>
+  </div>
+
+  <div class="listing" data-category="Diodes & Transistors">
+    <img src="" alt="BJT 2N2222 (metal packaging)">
+    <h2>BJT 2N2222 (metal packaging)</h2>
+    <p>NPN transistor (metal can).</p>
+    <p class="price">₹8</p>
+    <button class="btn" onclick="addToCart('BJT 2N2222 (metal packaging)', 8)">+</button>
+    <span class="counter" id="counter-BJT 2N2222 (metal packaging)">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('BJT 2N2222 (metal packaging)')">-</button>
+  </div>
+
+  <!-- Sensors -->
+  <div class="listing" data-category="Sensors">
+    <img src="" alt="LDR small size 5mm">
+    <h2>LDR small size 5mm</h2>
+    <p>Photoresistor light sensor.</p>
+    <p class="price">₹12</p>
+    <button class="btn" onclick="addToCart('LDR small size 5mm', 12)">+</button>
+    <span class="counter" id="counter-LDR small size 5mm">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('LDR small size 5mm')">-</button>
+  </div>
+
+  <!-- LEDs -->
+  <div class="listing" data-category="LEDs">
+    <img src="" alt="LED red 3 mm">
+    <h2>LED red 3 mm</h2>
+    <p>3mm Red LED indicator.</p>
+    <p class="price">₹2</p>
+    <button class="btn" onclick="addToCart('LED red 3 mm', 2)">+</button>
+    <span class="counter" id="counter-LED red 3 mm">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('LED red 3 mm')">-</button>
+  </div>
+
+  <!-- Capacitors & Pots -->
+  <div class="listing" data-category="Capacitors & Pots">
+    <img src="" alt="1nF ceramic capacitor">
+    <h2>1nF ceramic capacitor</h2>
+    <p>Ceramic disc capacitor.</p>
+    <p class="price">₹2</p>
+    <button class="btn" onclick="addToCart('1nF ceramic capacitor', 2)">+</button>
+    <span class="counter" id="counter-1nF ceramic capacitor">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('1nF ceramic capacitor')">-</button>
+  </div>
+
+  <div class="listing" data-category="Capacitors & Pots">
+    <img src="" alt="10nF ceramic capacitor">
+    <h2>10nF ceramic capacitor</h2>
+    <p>Ceramic disc capacitor.</p>
+    <p class="price">₹2</p>
+    <button class="btn" onclick="addToCart('10nF ceramic capacitor', 2)">+</button>
+    <span class="counter" id="counter-10nF ceramic capacitor">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('10nF ceramic capacitor')">-</button>
+  </div>
+
+  <div class="listing" data-category="Capacitors & Pots">
+    <img src="" alt="100nF ceramic capacitor">
+    <h2>100nF ceramic capacitor</h2>
+    <p>Ceramic disc capacitor.</p>
+    <p class="price">₹3</p>
+    <button class="btn" onclick="addToCart('100nF ceramic capacitor', 3)">+</button>
+    <span class="counter" id="counter-100nF ceramic capacitor">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('100nF ceramic capacitor')">-</button>
+  </div>
+
+  <div class="listing" data-category="Capacitors & Pots">
+    <img src="" alt="1K Pot">
+    <h2>1K Pot</h2>
+    <p>1kΩ potentiometer.</p>
+    <p class="price">₹15</p>
+    <button class="btn" onclick="addToCart('1K Pot', 15)">+</button>
+    <span class="counter" id="counter-1K Pot">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('1K Pot')">-</button>
+  </div>
+
+  <!-- ICs & Displays -->
+  <div class="listing" data-category="ICs & Displays">
+    <img src="" alt="7 SEGMENT DISPLAY">
+    <h2>7 SEGMENT DISPLAY</h2>
+    <p>Single 7-seg numeric display.</p>
+    <p class="price">₹20</p>
+    <button class="btn" onclick="addToCart('7 SEGMENT DISPLAY', 20)">+</button>
+    <span class="counter" id="counter-7 SEGMENT DISPLAY">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('7 SEGMENT DISPLAY')">-</button>
+  </div>
+
+  <div class="listing" data-category="ICs & Displays">
+    <img src="" alt="74LS00">
+    <h2>74LS00</h2>
+    <p>Quad 2-input NAND gates.</p>
+    <p class="price">₹18</p>
+    <button class="btn" onclick="addToCart('74LS00', 18)">+</button>
+    <span class="counter" id="counter-74LS00">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('74LS00')">-</button>
+  </div>
+
+  <div class="listing" data-category="ICs & Displays">
+    <img src="" alt="74LS04">
+    <h2>74LS04</h2>
+    <p>Hex inverter gates.</p>
+    <p class="price">₹18</p>
+    <button class="btn" onclick="addToCart('74LS04', 18)">+</button>
+    <span class="counter" id="counter-74LS04">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('74LS04')">-</button>
+  </div>
+
+  <div class="listing" data-category="ICs & Displays">
+    <img src="" alt="74LS85">
+    <h2>74LS85</h2>
+    <p>4-bit magnitude comparator.</p>
+    <p class="price">₹22</p>
+    <button class="btn" onclick="addToCart('74LS85', 22)">+</button>
+    <span class="counter" id="counter-74LS85">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('74LS85')">-</button>
+  </div>
+
+  <div class="listing" data-category="ICs & Displays">
+    <img src="" alt="74LS83">
+    <h2>74LS83</h2>
+    <p>4-bit binary full adder.</p>
+    <p class="price">₹24</p>
+    <button class="btn" onclick="addToCart('74LS83', 24)">+</button>
+    <span class="counter" id="counter-74LS83">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('74LS83')">-</button>
+  </div>
+
+  <div class="listing" data-category="ICs & Displays">
+    <img src="" alt="72LS47">
+    <h2>72LS47</h2>
+    <p>BCD to 7-segment decoder/driver.</p>
+    <p class="price">₹26</p>
+    <button class="btn" onclick="addToCart('72LS47', 26)">+</button>
+    <span class="counter" id="counter-72LS47">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('72LS47')">-</button>
+  </div>
+
+  <div class="listing" data-category="ICs & Displays">
+    <img src="" alt="74LS163">
+    <h2>74LS163</h2>
+    <p>4-bit synchronous counter.</p>
+    <p class="price">₹28</p>
+    <button class="btn" onclick="addToCart('74LS163', 28)">+</button>
+    <span class="counter" id="counter-74LS163">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('74LS163')">-</button>
+  </div>
+
+  <div class="listing" data-category="ICs & Displays">
+    <img src="" alt="Quad op amp LF 347">
+    <h2>Quad op amp LF 347</h2>
+    <p>Quad operational amplifier.</p>
+    <p class="price">₹35</p>
+    <button class="btn" onclick="addToCart('Quad op amp LF 347', 35)">+</button>
+    <span class="counter" id="counter-Quad op amp LF 347">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('Quad op amp LF 347')">-</button>
+  </div>
+
+  <div class="listing" data-category="ICs & Displays">
+    <img src="" alt="74LS157">
+    <h2>74LS157</h2>
+    <p>Quad 2-to-1 data multiplexer.</p>
+    <p class="price">₹22</p>
+    <button class="btn" onclick="addToCart('74LS157', 22)">+</button>
+    <span class="counter" id="counter-74LS157">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('74LS157')">-</button>
+  </div>
+
+  <div class="listing" data-category="ICs & Displays">
+    <img src="" alt="Cd40106">
+    <h2>Cd40106</h2>
+    <p>Hex Schmitt trigger inverter.</p>
+    <p class="price">₹18</p>
+    <button class="btn" onclick="addToCart('Cd40106', 18)">+</button>
+    <span class="counter" id="counter-Cd40106">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('Cd40106')">-</button>
+  </div>
+
+  <!-- Packaging & Storage -->
+  <div class="listing" data-category="Packaging & Storage">
+    <img src="" alt="KEPPER 66 BOX">
+    <h2>KEPPER 66 BOX</h2>
+    <p>Component storage box.</p>
+    <p class="price">₹80</p>
+    <button class="btn" onclick="addToCart('KEPPER 66 BOX', 80)">+</button>
+    <span class="counter" id="counter-KEPPER 66 BOX">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('KEPPER 66 BOX')">-</button>
+  </div>
+
+  <div class="listing" data-category="Packaging & Storage">
+    <img src="" alt="COTTON BOX">
+    <h2>COTTON BOX</h2>
+    <p>Protective cotton packing box.</p>
+    <p class="price">₹45</p>
+    <button class="btn" onclick="addToCart('COTTON BOX', 45)">+</button>
+    <span class="counter" id="counter-COTTON BOX">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('COTTON BOX')">-</button>
+  </div>
+
+  <div class="listing" data-category="Packaging & Storage">
+    <img src="" alt="ZIP LOCK COVER">
+    <h2>ZIP LOCK COVER</h2>
+    <p>Zip-lock bag for components.</p>
+    <p class="price">₹12</p>
+    <button class="btn" onclick="addToCart('ZIP LOCK COVER', 12)">+</button>
+    <span class="counter" id="counter-ZIP LOCK COVER">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('ZIP LOCK COVER')">-</button>
+  </div>
+
+  <!-- Services -->
+  <div class="listing" data-category="Services">
+    <img src="" alt="COURIER">
+    <h2>COURIER</h2>
+    <p>Courier/handling charge.</p>
+    <p class="price">₹60</p>
+    <button class="btn" onclick="addToCart('COURIER', 60)">+</button>
+    <span class="counter" id="counter-COURIER">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('COURIER')">-</button>
+  </div>
+
+  <div class="listing" data-category="Services">
+    <img src="" alt="MAN POWER">
+    <h2>MAN POWER</h2>
+    <p>Labour/service cost.</p>
+    <p class="price">₹100</p>
+    <button class="btn" onclick="addToCart('MAN POWER', 100)">+</button>
+    <span class="counter" id="counter-MAN POWER">0</span>
+    <button class="btn btn-remove" onclick="removeFromCart('MAN POWER')">-</button>
+  </div>
 </div>
 
 <!-- Modal -->
 <div id="imageModal" class="modal">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <img class="modal-content" id="modalImage">
+  <span class="close" onclick="closeModal()">&times;</span>
+  <img class="modal-content" id="modalImage" />
 </div>
 
 <script>
-function loadCounters() {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  // active category (default All)
+  let activeCategory = 'All';
+
+  function loadCounters() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
     cart.forEach(item => {
-        let counterEl = document.getElementById('counter-' + item.name);
-        if (counterEl) counterEl.textContent = item.quantity;
+      const el = document.getElementById('counter-' + item.name);
+      if (el) el.textContent = item.quantity;
     });
-}
-function addToCart(productName, price) {
+  }
+
+  function addToCart(productName, price) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let existingItem = cart.find(item => item.name === productName);
-    if (existingItem) { existingItem.quantity += 1; }
-    else { cart.push({ name: productName, price: price, quantity: 1 }); }
+    let existing = cart.find(it => it.name === productName);
+    if (existing) existing.quantity += 1;
+    else cart.push({ name: productName, price: price, quantity: 1 });
+
     localStorage.setItem('cart', JSON.stringify(cart));
-    document.getElementById('counter-' + productName).textContent = existingItem ? existingItem.quantity : 1;
-}
-function removeFromCart(productName) {
+    const el = document.getElementById('counter-' + productName);
+    if (el) el.textContent = existing ? existing.quantity : 1;
+  }
+
+  function removeFromCart(productName) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let existingItem = cart.find(item => item.name === productName);
-    if (existingItem && existingItem.quantity > 0) {
-        existingItem.quantity -= 1;
-        if (existingItem.quantity === 0) { cart = cart.filter(item => item.name !== productName); }
-        localStorage.setItem('cart', JSON.stringify(cart));
-        document.getElementById('counter-' + productName).textContent = existingItem.quantity > 0 ? existingItem.quantity : 0;
+    let existing = cart.find(it => it.name === productName);
+    if (existing && existing.quantity > 0) {
+      existing.quantity -= 1;
+      if (existing.quantity === 0) cart = cart.filter(it => it.name !== productName);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      const el = document.getElementById('counter-' + productName);
+      if (el) el.textContent = existing.quantity > 0 ? existing.quantity : 0;
     }
-}
-function filterProducts() {
-    let input = document.getElementById('search').value.toLowerCase();
-    let listings = document.querySelectorAll('.listing');
-    listings.forEach(item => {
-        let title = item.querySelector('h2').textContent.toLowerCase();
-        let desc = item.querySelector('p').textContent.toLowerCase();
-        item.style.display = (title.includes(input) || desc.includes(input)) ? "" : "none";
+  }
+
+  // Search + Category filter together
+  function applyFilters() {
+    const query = (document.getElementById('search').value || '').toLowerCase();
+    const cards = document.querySelectorAll('.listing');
+
+    cards.forEach(card => {
+      const cat = card.getAttribute('data-category');
+      const title = card.querySelector('h2')?.textContent.toLowerCase() || '';
+      const desc  = card.querySelector('p')?.textContent.toLowerCase() || '';
+
+      const matchText = title.includes(query) || desc.includes(query);
+      const matchCat  = (activeCategory === 'All') || (cat === activeCategory);
+
+      card.style.display = (matchText && matchCat) ? '' : 'none';
     });
-}
-document.querySelectorAll('.listing img').forEach(img => {
+  }
+
+  // Category chip events
+  document.getElementById('filters').addEventListener('click', (e) => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeCategory = chip.getAttribute('data-cat');
+    applyFilters();
+  });
+
+  // Image zoom
+  document.querySelectorAll('.listing img').forEach(img => {
     img.addEventListener('click', function() {
-        document.getElementById('imageModal').style.display = "block";
-        document.getElementById('modalImage').src = this.src;
+      if (!this.src) return; // if empty src, do nothing
+      document.getElementById('imageModal').style.display = 'block';
+      document.getElementById('modalImage').src = this.src;
     });
-});
-function closeModal() { document.getElementById('imageModal').style.display = "none"; }
-window.onload = loadCounters;
+  });
+  function closeModal(){ document.getElementById('imageModal').style.display = 'none'; }
+
+  window.onload = () => { loadCounters(); applyFilters(); };
 </script>
 </body>
 </html>
