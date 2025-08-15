@@ -5,20 +5,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Digivolt - Listings</title>
 <style>
-    body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
-    header { background: #4facfe; color: white; padding: 20px; text-align: center; position: relative; }
+    body { 
+        font-family: Arial, sans-serif; 
+        background: linear-gradient(135deg, #e0f7fa, #e3f2fd);
+        margin: 0; padding: 0; 
+    }
+    header { 
+        background: #0288d1; 
+        color: white; 
+        padding: 20px; 
+        text-align: center; 
+        position: relative; 
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
     h1 { margin: 0; }
     .container { max-width: 1000px; margin: auto; padding: 20px; }
-    .listing { background: white; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0px 2px 5px rgba(0,0,0,0.1); }
-    .listing h2 { margin: 0 0 10px; }
-    .listing p { margin: 0 0 10px; }
+    .listing { 
+        background: white; 
+        padding: 15px; 
+        margin-bottom: 15px; 
+        border-radius: 10px; 
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.1); 
+        border-left: 5px solid #4cafef; 
+        transition: transform 0.2s;
+    }
+    .listing:hover {
+        transform: scale(1.02);
+        border-left-color: #00c853;
+    }
+    .listing h2 { margin: 0 0 10px; color: #01579b; }
+    .listing p { margin: 0 0 10px; color: #555; }
     .price { color: green; font-weight: bold; }
-    .btn { display: inline-block; padding: 8px 14px; background: #4facfe; color: white; text-decoration: none; border-radius: 5px; cursor: pointer; border: none; }
+    .btn { 
+        display: inline-block; 
+        width: 40px; height: 40px; 
+        background: #4cafef; 
+        color: white; 
+        font-size: 20px; 
+        text-align: center; 
+        line-height: 40px; 
+        text-decoration: none; 
+        border-radius: 8px; 
+        cursor: pointer; 
+        border: none; 
+        font-weight: bold;
+    }
     .btn:hover { background: #3a8fd0; }
-    .buy-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: #ff9800; }
+    .buy-btn { 
+        position: absolute; 
+        right: 20px; top: 50%; 
+        transform: translateY(-50%); 
+        background: #ff9800; 
+        padding: 10px 20px; 
+        border-radius: 8px;
+    }
     .buy-btn:hover { background: #e68900; }
-    .counter { display: inline-block; background: #2196F3; color: white; padding: 5px 10px; margin-left: 15px; border-radius: 50%; font-weight: bold; min-width: 28px; text-align: center; }
-    .btn-remove { background: #f44336; margin-left: 5px; }
+    .counter { 
+        display: inline-block; 
+        background: #2196F3; 
+        color: white; 
+        padding: 5px 10px; 
+        margin: 0 10px; 
+        border-radius: 50%; 
+        font-weight: bold; 
+        min-width: 28px; 
+        text-align: center; 
+    }
+    .btn-remove { background: #f44336; }
     .btn-remove:hover { background: #d32f2f; }
 </style>
 </head>
@@ -35,8 +88,8 @@
         <p>High-quality microcontroller board for electronics projects.</p>
         <p class="price">₹550</p>
         <button class="btn" onclick="addToCart('Arduino Uno R3', 550)">+</button>
-        <button class="btn btn-remove" onclick="removeFromCart('Arduino Uno R3')">-</button>
         <span class="counter" id="counter-Arduino Uno R3">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Arduino Uno R3')">-</button>
     </div>
 
     <div class="listing">
@@ -44,8 +97,8 @@
         <p>Mini computer for coding, IoT, and robotics.</p>
         <p class="price">₹4200</p>
         <button class="btn" onclick="addToCart('Raspberry Pi 4', 4200)">+</button>
-        <button class="btn btn-remove" onclick="removeFromCart('Raspberry Pi 4')">-</button>
         <span class="counter" id="counter-Raspberry Pi 4">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Raspberry Pi 4')">-</button>
     </div>
 
     <div class="listing">
@@ -53,8 +106,8 @@
         <p>Pack of resistors for electronics projects.</p>
         <p class="price">₹109</p>
         <button class="btn" onclick="addToCart('Resisters (1k), 100 pcs', 109)">+</button>
-        <button class="btn btn-remove" onclick="removeFromCart('Resisters (1k), 100 pcs')">-</button>
         <span class="counter" id="counter-Resisters (1k), 100 pcs">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Resisters (1k), 100 pcs')">-</button>
     </div>
 
     <div class="listing">
@@ -62,8 +115,8 @@
         <p>Wireless module for IoT projects.</p>
         <p class="price">₹250</p>
         <button class="btn" onclick="addToCart('ESP8266 WiFi Module', 250)">+</button>
-        <button class="btn btn-remove" onclick="removeFromCart('ESP8266 WiFi Module')">-</button>
         <span class="counter" id="counter-ESP8266 WiFi Module">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('ESP8266 WiFi Module')">-</button>
     </div>
 
 </div>
@@ -111,4 +164,3 @@ window.onload = loadCounters;
 </script>
 </body>
 </html>
-
