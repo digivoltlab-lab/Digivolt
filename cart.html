@@ -1,106 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Your Cart</title>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #f5f5f5; }
-        .cart-container {
-            width: 60%; margin: 30px auto; background: white; padding: 20px;
-            border-radius: 10px; box-shadow: 0px 0px 10px #ccc;
-        }
-        h2 { text-align: center; }
-        .cart-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #ddd; }
-        .cart-item button {
-            background: red; color: white; border: none; padding: 5px 8px;
-            cursor: pointer; border-radius: 4px;
-        }
-        .total { font-weight: bold; font-size: 18px; margin-top: 10px; }
-        .place-order {
-            background: green; color: white; border: none; padding: 10px 15px;
-            font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 10px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Cart</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        margin: 0;
+        padding: 20px;
+    }
+    .cart-container {
+        max-width: 800px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 10px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background-color: #0288d1;
+        color: white;
+    }
+    img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    .total {
+        font-weight: bold;
+        font-size: 18px;
+        text-align: right;
+        padding-top: 10px;
+    }
+    .place-order {
+        display: block;
+        margin-top: 20px;
+        padding: 10px;
+        background: green;
+        color: white;
+        text-align: center;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 16px;
+    }
+    .delete-btn {
+        background: red;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
 </head>
 <body>
 
 <div class="cart-container">
     <h2>Your Cart</h2>
-    <div id="cart-items"></div>
-    <div class="total" id="total-price">Total: ₹0</div>
-    <button class="place-order" onclick="placeOrder()">Place Order</button>
+    <table id="cartTable">
+        <tr>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+    </table>
+    <div class="total" id="cartTotal">Total: ₹0</div>
+    <a href="#" class="place-order">Place Order</a>
 </div>
 
 <script>
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const productImages = {
+    "Arduino Uno R3": "Arduino.jpg.jpg",
+    "Raspberry Pi 4": "RaspberryPi.jpg",
+    "Resisters (1k), 100 pcs": "Resistors.jpg",
+    "ESP8266 WiFi Module": "ESP8266.jpg"
+};
 
-    function renderCart() {
-        let cartItemsDiv = document.getElementById("cart-items");
-        let totalPrice = 0;
-        cartItemsDiv.innerHTML = "";
+function loadCart() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let table = document.getElementById('cartTable');
+    let total = 0;
 
-        cart.forEach((item, index) => {
-            let itemDiv = document.createElement("div");
-            itemDiv.classList.add("cart-item");
+    cart.forEach(item => {
+        let row = table.insertRow();
+        let imgCell = row.insertCell(0);
+        let nameCell = row.insertCell(1);
+        let qtyCell = row.insertCell(2);
+        let priceCell = row.insertCell(3);
+        let totalCell = row.insertCell(4);
+        let actionCell = row.insertCell(5);
 
-            let name = document.createElement("span");
-            name.textContent = `${item.name} (x${item.quantity})`;
+        imgCell.innerHTML = `<img src="${productImages[item.name] || 'placeholder.jpg'}" alt="${item.name}">`;
+        nameCell.textContent = item.name;
+        qtyCell.textContent = item.quantity;
+        priceCell.textContent = `₹${item.price}`;
+        totalCell.textContent = `₹${item.price * item.quantity}`;
+        actionCell.innerHTML = `<button class="delete-btn" onclick="removeItem('${item.name}')">Delete</button>`;
 
-            let price = document.createElement("span");
-            price.textContent = `₹${item.price * item.quantity}`;
-            totalPrice += item.price * item.quantity;
+        total += item.price * item.quantity;
+    });
 
-            let delBtn = document.createElement("button");
-            delBtn.textContent = "Delete";
-            delBtn.onclick = () => {
-                cart.splice(index, 1);
-                localStorage.setItem("cart", JSON.stringify(cart));
-                renderCart();
-            };
+    document.getElementById('cartTotal').textContent = `Total: ₹${total}`;
+}
 
-            itemDiv.appendChild(name);
-            itemDiv.appendChild(price);
-            itemDiv.appendChild(delBtn);
-            cartItemsDiv.appendChild(itemDiv);
-        });
+function removeItem(name) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart = cart.filter(item => item.name !== name);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    location.reload();
+}
 
-        document.getElementById("total-price").textContent = `Total: ₹${totalPrice}`;
-        return totalPrice;
-    }
-
-    function sendWhatsAppOrder(totalAmount) {
-        let phoneNumber = "919899490935"; // WhatsApp number (+91 without +)
-        let message = "📦 *New Order Received!*\n\n";
-        message += "🛍 *Order Details:*\n";
-
-        cart.forEach(item => {
-            message += `• ${item.name}  —  x${item.quantity}  —  ₹${item.price * item.quantity}\n`;
-        });
-
-        message += `\n💰 *Total Amount:* ₹${totalAmount}`;
-        message += `\n\n📅 Date: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
-        message += "\n\n✅ Please confirm the order.";
-
-        let whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-        window.open(whatsappLink, "_blank");
-    }
-
-    function placeOrder() {
-        let totalAmount = renderCart();
-        if (totalAmount > 0) {
-            sendWhatsAppOrder(totalAmount);
-
-            let thankYou = document.createElement("h3");
-            thankYou.style.textAlign = "center";
-            thankYou.style.marginTop = "20px";
-            thankYou.style.color = "green";
-            thankYou.textContent = "Thank You for Shopping!";
-            document.querySelector(".cart-container").appendChild(thankYou);
-        } else {
-            alert("Your cart is empty!");
-        }
-    }
-
-    renderCart();
+window.onload = loadCart;
 </script>
 
 </body>
