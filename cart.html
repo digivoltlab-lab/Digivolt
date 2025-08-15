@@ -9,34 +9,16 @@
             border-radius: 10px; box-shadow: 0px 0px 10px #ccc;
         }
         h2 { text-align: center; }
-        .cart-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 0; border-bottom: 1px solid #ddd;
+        .cart-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #ddd; }
+        .cart-item button {
+            background: red; color: white; border: none; padding: 5px 8px;
+            cursor: pointer; border-radius: 4px;
         }
-        .cart-item img {
-            width: 50px; height: 50px; object-fit: cover; border-radius: 5px;
-            margin-right: 10px;
-        }
-        .item-info { display: flex; align-items: center; }
-        .delete-btn {
-            background: #e74c3c; /* लाल */
-            color: white; border: none; padding: 5px 8px;
-            cursor: pointer; border-radius: 4px; transition: 0.3s;
-        }
-        .delete-btn:hover { background: #c0392b; }
         .total { font-weight: bold; font-size: 18px; margin-top: 10px; }
         .place-order {
-            background: #27ae60; /* हरा */
-            color: white; border: none; padding: 10px 15px;
+            background: green; color: white; border: none; padding: 10px 15px;
             font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 10px;
         }
-        .place-order:hover { background: #1e8449; }
-        .back-btn {
-            background: #2980b9; /* नीला */
-            color: white; border: none; padding: 10px 15px;
-            font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 10px;
-        }
-        .back-btn:hover { background: #1f618d; }
     </style>
 </head>
 <body>
@@ -46,18 +28,10 @@
     <div id="cart-items"></div>
     <div class="total" id="total-price">Total: ₹0</div>
     <button class="place-order" onclick="placeOrder()">Place Order</button>
-    <button class="back-btn" onclick="goBack()">⬅ Back to Shop</button>
 </div>
 
 <script>
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    const productImages = {
-        "Arduino Uno R3": "Arduino.jpg.jpg",
-        "Raspberry Pi 0": "RaspberryPi.jpg",
-        "Resisters (1k), 100 pcs": "Resistors.jpg",
-        "ESP8266 WiFi Module": "esp.png"
-    };
 
     function renderCart() {
         let cartItemsDiv = document.getElementById("cart-items");
@@ -68,17 +42,8 @@
             let itemDiv = document.createElement("div");
             itemDiv.classList.add("cart-item");
 
-            let infoDiv = document.createElement("div");
-            infoDiv.classList.add("item-info");
-
-            let img = document.createElement("img");
-            img.src = productImages[item.name] || "default.jpg";
-
             let name = document.createElement("span");
             name.textContent = `${item.name} (x${item.quantity})`;
-
-            infoDiv.appendChild(img);
-            infoDiv.appendChild(name);
 
             let price = document.createElement("span");
             price.textContent = `₹${item.price * item.quantity}`;
@@ -86,14 +51,13 @@
 
             let delBtn = document.createElement("button");
             delBtn.textContent = "Delete";
-            delBtn.classList.add("delete-btn");
             delBtn.onclick = () => {
                 cart.splice(index, 1);
                 localStorage.setItem("cart", JSON.stringify(cart));
                 renderCart();
             };
 
-            itemDiv.appendChild(infoDiv);
+            itemDiv.appendChild(name);
             itemDiv.appendChild(price);
             itemDiv.appendChild(delBtn);
             cartItemsDiv.appendChild(itemDiv);
@@ -134,11 +98,6 @@
         } else {
             alert("Your cart is empty!");
         }
-    }
-
-    function goBack() {
-        // GitHub Pages path
-        window.location.href = "https://<your-github-username>.github.io/<repo-name>/index.html";
     }
 
     renderCart();
