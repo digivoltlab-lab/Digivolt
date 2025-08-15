@@ -31,17 +31,6 @@
         outline: none;
         font-size: 16px;
     }
-    .category {
-        grid-column: 1 / -1;
-        background: #01579b;
-        color: white;
-        padding: 10px;
-        font-size: 1.2em;
-        font-weight: bold;
-        position: sticky;
-        top: 0;
-        z-index: 5;
-    }
     .container { 
         max-width: 1200px; 
         margin: auto; 
@@ -102,6 +91,8 @@
     }
     .btn-remove { background: #f44336; }
     .btn-remove:hover { background: #d32f2f; }
+
+    /* Highlighted NEXT button */
     .buy-btn { 
         position: absolute; 
         right: 20px; 
@@ -122,6 +113,8 @@
         transform: translateY(-50%) scale(1.05);
         box-shadow: 0 6px 15px rgba(0,0,0,0.4);
     }
+
+    /* Modal for image zoom */
     .modal {
         display: none;
         position: fixed;
@@ -148,6 +141,22 @@
         font-weight: bold;
         cursor: pointer;
     }
+
+    /* Category Heading */
+    .category-heading {
+        grid-column: 1 / -1;
+        background: #0288d1;
+        color: white;
+        padding: 10px;
+        font-size: 1.3em;
+        font-weight: bold;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-radius: 5px;
+    }
+
+    /* 📱 Mobile adjustments */
     @media (max-width: 600px) {
         header { padding: 15px; }
         .buy-btn {
@@ -174,9 +183,8 @@
 </header>
 
 <div class="container" id="product-list">
-
-    <!-- Category 1: Modules -->
-    <div class="category">Modules</div>
+    <!-- Modules -->
+    <div class="category-heading">Modules</div>
 
     <div class="listing">
         <img src="Arduino.jpg.jpg" alt="Arduino Uno R3">
@@ -207,83 +215,3 @@
         <span class="counter" id="counter-ESP8266 WiFi Module">0</span>
         <button class="btn btn-remove" onclick="removeFromCart('ESP8266 WiFi Module')">-</button>
     </div>
-
-    <!-- बाकी categories & products यहाँ से जारी रहेंगे... -->
-
-</div>
-
-<!-- Modal -->
-<div id="imageModal" class="modal">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <img class="modal-content" id="modalImage">
-</div>
-
-<script>
-function loadCounters() {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    cart.forEach(item => {
-        let counterEl = document.getElementById('counter-' + item.name);
-        if (counterEl) {
-            counterEl.textContent = item.quantity;
-        }
-    });
-}
-
-function addToCart(productName, price) {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let existingItem = cart.find(item => item.name === productName);
-
-    if (existingItem) {
-        existingItem.quantity += 1;
-    } else {
-        cart.push({ name: productName, price: price, quantity: 1 });
-    }
-
-    localStorage.setItem('cart', JSON.stringify(cart));
-    document.getElementById('counter-' + productName).textContent = existingItem ? existingItem.quantity : 1;
-}
-
-function removeFromCart(productName) {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let existingItem = cart.find(item => item.name === productName);
-
-    if (existingItem && existingItem.quantity > 0) {
-        existingItem.quantity -= 1;
-        if (existingItem.quantity === 0) {
-            cart = cart.filter(item => item.name !== productName);
-        }
-        localStorage.setItem('cart', JSON.stringify(cart));
-        document.getElementById('counter-' + productName).textContent = existingItem.quantity > 0 ? existingItem.quantity : 0;
-    }
-}
-
-function filterProducts() {
-    let input = document.getElementById('search').value.toLowerCase();
-    let listings = document.querySelectorAll('.listing');
-
-    listings.forEach(item => {
-        let title = item.querySelector('h2').textContent.toLowerCase();
-        let desc = item.querySelector('p').textContent.toLowerCase();
-        if (title.includes(input) || desc.includes(input)) {
-            item.style.display = "";
-        } else {
-            item.style.display = "none";
-        }
-    });
-}
-
-document.querySelectorAll('.listing img').forEach(img => {
-    img.addEventListener('click', function() {
-        document.getElementById('imageModal').style.display = "block";
-        document.getElementById('modalImage').src = this.src;
-    });
-});
-
-function closeModal() {
-    document.getElementById('imageModal').style.display = "none";
-}
-
-window.onload = loadCounters;
-</script>
-</body>
-</html>
