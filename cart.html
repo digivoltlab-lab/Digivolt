@@ -1,70 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Cart</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-        background: #f5f5f5;
-    }
-    h1 {
-        text-align: center;
-        color: #333;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background: white;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    th, td {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        text-align: center;
-    }
-    th {
-        background: #3aa6ff;
-        color: white;
-    }
-    .total {
-        font-weight: bold;
-        font-size: 1.2em;
-        text-align: right;
-        margin-top: 15px;
-    }
-</style>
+    <title>Your Cart</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f5f5f5; }
+        .cart-container {
+            width: 60%; margin: 30px auto; background: white; padding: 20px;
+            border-radius: 10px; box-shadow: 0px 0px 10px #ccc;
+        }
+        h2 { text-align: center; }
+        .cart-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #ddd; }
+        .cart-item button {
+            background: red; color: white; border: none; padding: 5px 8px;
+            cursor: pointer; border-radius: 4px;
+        }
+        .total { font-weight: bold; font-size: 18px; margin-top: 10px; }
+        .place-order {
+            background: green; color: white; border: none; padding: 10px 15px;
+            font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
 
-<h1>Your Cart</h1>
-<table id="cartTable">
-    <tr>
-        <th>Item</th>
-        <th>Qty</th>
-        <th>Price</th>
-        <th>Total</th>
-    </tr>
-</table>
-<div class="total" id="grandTotal">Grand Total: ₹0</div>
+<div class="cart-container">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <div class="total" id="total-price">Total: ₹0</div>
+    <button class="place-order" onclick="placeOrder()">Place Order</button>
+</div>
 
 <script>
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
-let table = document.getElementById('cartTable');
-let grandTotal = 0;
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-cart.forEach(item => {
-    let row = table.insertRow();
-    row.insertCell(0).textContent = item.name;
-    row.insertCell(1).textContent = item.qty;
-    row.insertCell(2).textContent = "₹" + item.price;
-    row.insertCell(3).textContent = "₹" + item.total;
-    grandTotal += item.total;
-});
+    function renderCart() {
+        let cartItemsDiv = document.getElementById("cart-items");
+        let totalPrice = 0;
+        cartItemsDiv.innerHTML = "";
 
-document.getElementById('grandTotal').textContent = "Grand Total: ₹" + grandTotal;
+        cart.forEach((item, index) => {
+            let itemDiv = document.createElement("div");
+            itemDiv.classList.add("cart-item");
+
+            let name = document.createElement("span");
+            name.textContent = `${item.name} (x${item.quantity})`;
+
+            let price = document.createElement("span");
+            price.textContent = `₹${item.price * item.quantity}`;
+            totalPrice += item.price * item.quantity;
+
+            let delBtn = document.createElement("button");
+            delBtn.textContent = "Delete";
+            delBtn.onclick = () => {
+                cart.splice(index, 1);
+                localStorage.setItem("cart", JSON.stringify(cart));
+                renderCart();
+            };
+
+            itemDiv.appendChild(name);
+            itemDiv.appendChild(price);
+            itemDiv.appendChild(delBtn);
+            cartItemsDiv.appendChild(itemDiv);
+        });
+
+        document.getElementById("total-price").textContent = `Total: ₹${totalPrice}`;
+        return totalPrice;
+    }
+
+    function sendWhatsAppOrder(totalAmount) {
+        let phoneNumber = "919899490935"; // WhatsApp number (+91 without +)
+        let message = "📦 *New Order Received!*\n\n";
+        message += "🛍 *Order Details:*\n";
+
+        cart.forEach(item => {
+            message += `• ${item.name}  —  x${item.quantity}  —  ₹${item.price * item.quantity}\n`;
+        });
+
+        message += `\n💰 *Total Amount:* ₹${totalAmount}`;
+        message += `\n\n📅 Date: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
+        message += "\n\n✅ Please confirm the order.";
+
+        let whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappLink, "_blank");
+    }
+
+    function placeOrder() {
+        let totalAmount = renderCart();
+        if (totalAmount > 0) {
+            sendWhatsAppOrder(totalAmount);
+
+            let thankYou = document.createElement("h3");
+            thankYou.style.textAlign = "center";
+            thankYou.style.marginTop = "20px";
+            thankYou.style.color = "green";
+            thankYou.textContent = "Thank You for Shopping!";
+            document.querySelector(".cart-container").appendChild(thankYou);
+        } else {
+            alert("Your cart is empty!");
+        }
+    }
+
+    renderCart();
 </script>
 
 </body>
