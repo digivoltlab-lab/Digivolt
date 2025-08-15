@@ -19,7 +19,9 @@
         box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
     h1 { margin: 0; }
-    .search-box { margin-top: 10px; }
+    .search-box {
+        margin-top: 10px;
+    }
     .search-box input {
         width: 80%;
         max-width: 400px;
@@ -85,19 +87,6 @@
         border-radius: 8px;
     }
     .buy-btn:hover { background: #e68900; }
-    .logout-btn {
-        position: absolute;
-        left: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: #f44336;
-        padding: 10px 20px;
-        border-radius: 8px;
-        color: white;
-        cursor: pointer;
-        border: none;
-    }
-    .logout-btn:hover { background: #d32f2f; }
     .counter { 
         display: inline-block; 
         background: #2196F3; 
@@ -143,28 +132,21 @@
     /* 📱 Mobile adjustments */
     @media (max-width: 600px) {
         header { padding: 15px; }
-        .buy-btn, .logout-btn {
+        .buy-btn {
             position: static;
             display: block;
             margin: 10px auto 0;
             transform: none;
             text-align: center;
         }
-        .listing img { height: 150px; }
+        .listing img {
+            height: 150px;
+        }
     }
 </style>
-
-<script>
-// 🚫 Redirect if not logged in
-if (localStorage.getItem("loggedIn") !== "true") {
-    window.location.href = "login.html";
-}
-</script>
-
 </head>
 <body>
 <header>
-    <button class="logout-btn" onclick="logout()">Logout</button>
     <h1>Digivolt Listings</h1>
     <p>Your tech marketplace</p>
     <div class="search-box">
@@ -174,8 +156,47 @@ if (localStorage.getItem("loggedIn") !== "true") {
 </header>
 
 <div class="container" id="product-list">
-    <!-- Same product listings as before -->
-    <!-- ... -->
+
+    <div class="listing">
+        <img src="Arduino.jpg.jpg" alt="Arduino Uno R3">
+        <h2>Arduino Uno R3</h2>
+        <p>High-quality microcontroller board for electronics projects.</p>
+        <p class="price">₹310</p>
+        <button class="btn" onclick="addToCart('Arduino Uno R3', 310)">+</button>
+        <span class="counter" id="counter-Arduino Uno R3">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Arduino Uno R3')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="RaspberryPi.jpg" alt="Raspberry Pi 0">
+        <h2>Raspberry Pi 0</h2>
+        <p>Mini computer for coding, IoT, and robotics.</p>
+        <p class="price">₹920</p>
+        <button class="btn" onclick="addToCart('Raspberry Pi 0', 920)">+</button>
+        <span class="counter" id="counter-Raspberry Pi 0">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Raspberry Pi 0')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="Resistors.jpg" alt="Resisters (1k), 100 pcs">
+        <h2>Resisters (1k), 100 pcs</h2>
+        <p>Pack of resistors for electronics projects.</p>
+        <p class="price">₹40</p>
+        <button class="btn" onclick="addToCart('Resisters (1k), 100 pcs', 40)">+</button>
+        <span class="counter" id="counter-Resisters (1k), 100 pcs">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Resisters (1k), 100 pcs')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="esp.png" alt="ESP8266 WiFi Module">
+        <h2>ESP8266 WiFi Module</h2>
+        <p>Wireless module for IoT projects.</p>
+        <p class="price">₹140</p>
+        <button class="btn" onclick="addToCart('ESP8266 WiFi Module', 140)">+</button>
+        <span class="counter" id="counter-ESP8266 WiFi Module">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('ESP8266 WiFi Module')">-</button>
+    </div>
+
 </div>
 
 <!-- Modal -->
@@ -185,11 +206,6 @@ if (localStorage.getItem("loggedIn") !== "true") {
 </div>
 
 <script>
-function logout() {
-    localStorage.removeItem("loggedIn");
-    window.location.href = "login.html";
-}
-
 function loadCounters() {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     cart.forEach(item => {
@@ -228,6 +244,7 @@ function removeFromCart(productName) {
     }
 }
 
+// 🔍 Search filter
 function filterProducts() {
     let input = document.getElementById('search').value.toLowerCase();
     let listings = document.querySelectorAll('.listing');
@@ -243,6 +260,7 @@ function filterProducts() {
     });
 }
 
+// 📷 Image click zoom
 document.querySelectorAll('.listing img').forEach(img => {
     img.addEventListener('click', function() {
         document.getElementById('imageModal').style.display = "block";
