@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Digivolt</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #89f7fe, #66a6ff);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .login-box {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+        width: 100%;
+        max-width: 350px;
+        text-align: center;
+    }
+    h2 {
+        margin-bottom: 20px;
+        color: #0288d1;
+    }
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+    button {
+        width: 100%;
+        padding: 10px;
+        background: #0288d1;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    button:hover {
+        background: #0277bd;
+    }
+</style>
+</head>
+<body>
+<div class="login-box">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Enter username">
+    <input type="password" id="password" placeholder="Enter password">
+    <button onclick="login()">Login</button>
+</div>
+
+<script>
+function login() {
+    let user = document.getElementById("username").value;
+    let pass = document.getElementById("password").value;
+
+    // simple static login check
+    if (user === "admin" && pass === "1234") {
+        localStorage.setItem("loggedIn", "true");
+        window.location.href = "index.html"; // listings page ka naam
+    } else {
+        alert("Invalid username or password");
+    }
+}
+</script>
+</body>
+</html>
