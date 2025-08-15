@@ -19,19 +19,24 @@
         }
         .item-info { display: flex; align-items: center; }
         .delete-btn {
-            background: #ff4d4d; color: white; border: none; padding: 5px 8px;
+            background: #e74c3c; /* लाल */
+            color: white; border: none; padding: 5px 8px;
             cursor: pointer; border-radius: 4px; transition: 0.3s;
         }
-        .delete-btn:hover { background: #cc0000; }
+        .delete-btn:hover { background: #c0392b; }
         .total { font-weight: bold; font-size: 18px; margin-top: 10px; }
         .place-order {
-            background: green; color: white; border: none; padding: 10px 15px;
+            background: #27ae60; /* हरा */
+            color: white; border: none; padding: 10px 15px;
             font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 10px;
         }
+        .place-order:hover { background: #1e8449; }
         .back-btn {
-            background: #007bff; color: white; border: none; padding: 10px 15px;
+            background: #2980b9; /* नीला */
+            color: white; border: none; padding: 10px 15px;
             font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 10px;
         }
+        .back-btn:hover { background: #1f618d; }
     </style>
 </head>
 <body>
@@ -132,7 +137,8 @@
     }
 
     function goBack() {
-        window.location.href = "index.html";
+        // GitHub Pages path
+        window.location.href = "https://<your-github-username>.github.io/<repo-name>/index.html";
     }
 
     renderCart();
