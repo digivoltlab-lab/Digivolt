@@ -13,6 +13,11 @@
     .total { font-size: 1.2em; font-weight: bold; margin-top: 20px; }
     .btn-del { background: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
     .btn-del:hover { background: darkred; }
+    .btn-order { background: green; color: white; padding: 10px 20px; font-size: 1em; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; display: block; }
+    .btn-order:hover { background: darkgreen; }
+    .qr-section { margin-top: 30px; text-align: center; display: none; }
+    .qr-section img { width: 200px; height: 200px; }
+    .qr-section p { font-size: 1.1em; font-weight: bold; }
 </style>
 </head>
 <body>
@@ -21,15 +26,24 @@
 </header>
 <div class="container" id="cart-container"></div>
 
+<button class="btn-order" id="order-btn" style="display:none;" onclick="placeOrder()">Place Order</button>
+
+<div class="qr-section" id="payment-section">
+    <p>Scan this QR code to make payment</p>
+    <img src="payment-qr.png" alt="Payment QR Code">
+</div>
+
 <script>
 function renderCart() {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let container = document.getElementById('cart-container');
-    container.innerHTML = ""; // Clear old content
+    let orderBtn = document.getElementById('order-btn');
+    container.innerHTML = ""; 
     let total = 0;
 
     if (cart.length === 0) {
         container.innerHTML = "<p>Your cart is empty.</p>";
+        orderBtn.style.display = "none";
         return;
     }
 
@@ -50,18 +64,24 @@ function renderCart() {
     totalDiv.classList.add('total');
     totalDiv.innerText = `Total: ₹${total}`;
     container.appendChild(totalDiv);
+
+    // Agar cart me kuch hai to Place Order button dikhaye
+    orderBtn.style.display = "block";
 }
 
 function deleteItem(index) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    cart.splice(index, 1); // Remove item
+    cart.splice(index, 1); 
     localStorage.setItem('cart', JSON.stringify(cart));
-    renderCart(); // Refresh cart display
+    renderCart(); 
 }
 
-// First time render
+function placeOrder() {
+    document.getElementById('payment-section').style.display = "block";
+    document.getElementById('order-btn').style.display = "none";
+}
+
 renderCart();
 </script>
 </body>
 </html>
-
