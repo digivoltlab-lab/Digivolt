@@ -68,12 +68,18 @@
     }
 
     function sendWhatsAppOrder(totalAmount) {
-        let phoneNumber = "919582420851"; // WhatsApp number (+91 without +)
-        let message = "🛒 *New Order Details:*\n\n";
+        let phoneNumber = "919899490935"; // WhatsApp number (+91 without +)
+        let message = "📦 *New Order Received!*\n\n";
+        message += "🛍 *Order Details:*\n";
+
         cart.forEach(item => {
-            message += `• ${item.name} (x${item.quantity}) - ₹${item.price * item.quantity}\n`;
+            message += `• ${item.name}  —  x${item.quantity}  —  ₹${item.price * item.quantity}\n`;
         });
-        message += `\n💰 *Total:* ₹${totalAmount}`;
+
+        message += `\n💰 *Total Amount:* ₹${totalAmount}`;
+        message += `\n\n📅 Date: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
+        message += "\n\n✅ Please confirm the order.";
+
         let whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
         window.open(whatsappLink, "_blank");
     }
