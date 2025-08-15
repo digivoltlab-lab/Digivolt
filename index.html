@@ -19,7 +19,9 @@
         box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
     h1 { margin: 0; }
-    .search-box { margin-top: 10px; }
+    .search-box {
+        margin-top: 10px;
+    }
     .search-box input {
         width: 80%;
         max-width: 400px;
@@ -33,8 +35,8 @@
         max-width: 1200px; 
         margin: auto; 
         padding: 20px; 
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 20px;
     }
     .listing { 
@@ -45,14 +47,14 @@
         border-left: 5px solid #4cafef; 
         transition: transform 0.2s;
         text-align: center;
-        flex: 1 1 250px;
-        max-width: 250px;
     }
-    .listing:hover { transform: scale(1.02); border-left-color: #00c853; }
+    .listing:hover {
+        transform: scale(1.02);
+        border-left-color: #00c853;
+    }
     .listing img {
         width: 100%;
-        height: auto;
-        max-height: 200px;
+        height: 180px;
         object-fit: cover;
         border-radius: 10px;
         margin-bottom: 10px;
@@ -61,13 +63,6 @@
     .listing h2 { margin: 0 0 10px; color: #01579b; font-size: 1.2em; }
     .listing p { margin: 0 0 10px; color: #555; font-size: 0.95em; }
     .price { color: green; font-weight: bold; font-size: 1.1em; }
-    .controls {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
     .btn { 
         display: inline-block; 
         width: 40px; height: 40px; 
@@ -76,41 +71,89 @@
         font-size: 20px; 
         text-align: center; 
         line-height: 40px; 
+        text-decoration: none; 
         border-radius: 8px; 
         cursor: pointer; 
         border: none; 
         font-weight: bold;
     }
     .btn:hover { background: #3a8fd0; }
-    .btn-remove { background: #f44336; }
-    .btn-remove:hover { background: #d32f2f; }
     .counter { 
+        display: inline-block; 
         background: #2196F3; 
         color: white; 
         padding: 5px 10px; 
+        margin: 0 10px; 
         border-radius: 50%; 
         font-weight: bold; 
         min-width: 28px; 
         text-align: center; 
     }
+    .btn-remove { background: #f44336; }
+    .btn-remove:hover { background: #d32f2f; }
+
+    /* Highlighted NEXT button */
     .buy-btn { 
         position: absolute; 
-        right: 20px; top: 50%; 
+        right: 20px; 
+        top: 50%; 
         transform: translateY(-50%); 
-        background: #ff9800; 
-        padding: 10px 20px; 
-        border-radius: 8px;
-        text-decoration: none;
+        background: linear-gradient(45deg, #ff5722, #ff9800);
+        padding: 12px 25px;
+        border-radius: 50px;
+        font-size: 18px;
+        font-weight: bold;
+        text-transform: uppercase;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         color: white;
+        transition: all 0.3s ease;
     }
-    .buy-btn:hover { background: #e68900; }
+    .buy-btn:hover { 
+        background: linear-gradient(45deg, #ff9800, #ff5722);
+        transform: translateY(-50%) scale(1.05);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    }
+
+    /* Modal for image zoom */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.8);
+    }
+    .modal-content {
+        display: block;
+        margin: 5% auto;
+        max-width: 90%;
+        border-radius: 10px;
+    }
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    /* 📱 Mobile adjustments */
     @media (max-width: 600px) {
         header { padding: 15px; }
         .buy-btn {
             position: static;
-            display: inline-block;
-            margin-top: 10px;
+            display: block;
+            margin: 10px auto 0;
             transform: none;
+            text-align: center;
+        }
+        .listing img {
+            height: 150px;
         }
     }
 </style>
@@ -122,69 +165,64 @@
     <div class="search-box">
         <input type="text" id="search" placeholder="Search products..." onkeyup="filterProducts()">
     </div>
-    <a href="cart.html" class="buy-btn">Buy</a>
+    <a href="cart.html" class="btn buy-btn">Next</a>
 </header>
 
 <div class="container" id="product-list">
+
+    <div class="listing">
+        <img src="Arduino.jpg.jpg" alt="Arduino Uno R3">
+        <h2>Arduino Uno R3</h2>
+        <p>High-quality microcontroller board for electronics projects.</p>
+        <p class="price">₹310</p>
+        <button class="btn" onclick="addToCart('Arduino Uno R3', 310)">+</button>
+        <span class="counter" id="counter-Arduino Uno R3">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Arduino Uno R3')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="RaspberryPi.jpg" alt="Raspberry Pi 0">
+        <h2>Raspberry Pi 0</h2>
+        <p>Mini computer for coding, IoT, and robotics.</p>
+        <p class="price">₹920</p>
+        <button class="btn" onclick="addToCart('Raspberry Pi 0', 920)">+</button>
+        <span class="counter" id="counter-Raspberry Pi 0">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Raspberry Pi 0')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="Resistors.jpg" alt="Resisters (1k), 100 pcs">
+        <h2>Resisters (1k), 100 pcs</h2>
+        <p>Pack of resistors for electronics projects.</p>
+        <p class="price">₹40</p>
+        <button class="btn" onclick="addToCart('Resisters (1k), 100 pcs', 40)">+</button>
+        <span class="counter" id="counter-Resisters (1k), 100 pcs">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Resisters (1k), 100 pcs')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="esp.png" alt="ESP8266 WiFi Module">
+        <h2>ESP8266 WiFi Module</h2>
+        <p>Wireless module for IoT projects.</p>
+        <p class="price">₹140</p>
+        <button class="btn" onclick="addToCart('ESP8266 WiFi Module', 140)">+</button>
+        <span class="counter" id="counter-ESP8266 WiFi Module">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('ESP8266 WiFi Module')">-</button>
+    </div>
+
+</div>
+
+<!-- Modal -->
+<div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
+
 <script>
-let products = [
-    {name: "Breadboard WISH WB 150", price: 50, img: "breadboard.jpg"},
-    {name: "Wire Stripper EGO 150B", price: 120, img: "wirestripper.jpg"},
-    {name: "Berg Wires F-F", price: 20, img: "berg-ff.jpg"},
-    {name: "Berg Wires M-M", price: 20, img: "berg-mm.jpg"},
-    {name: "Berg Wires M-F", price: 20, img: "berg-mf.jpg"},
-    {name: "Resistor 15K 1/4W", price: 5, img: "resistor.jpg"},
-    {name: "1k ohm resistor", price: 5, img: "resistor.jpg"},
-    {name: "10k ohm resistor", price: 5, img: "resistor.jpg"},
-    {name: "100k ohm resistor", price: 5, img: "resistor.jpg"},
-    {name: "220k ohm resistor", price: 5, img: "resistor.jpg"},
-    {name: "330k ohm resistor", price: 5, img: "resistor.jpg"},
-    {name: "Diode IN4007", price: 3, img: "diode.jpg"},
-    {name: "Zener diode 3.6V", price: 5, img: "diode.jpg"},
-    {name: "MOSFET IRF 640", price: 25, img: "mosfet.jpg"},
-    {name: "BJT 2N2222", price: 10, img: "bjt.jpg"},
-    {name: "LDR small size", price: 15, img: "ldr.jpg"},
-    {name: "LED red 3mm", price: 2, img: "led.jpg"},
-    {name: "1nF ceramic capacitor", price: 2, img: "capacitor.jpg"},
-    {name: "10nF ceramic capacitor", price: 2, img: "capacitor.jpg"},
-    {name: "100nF ceramic capacitor", price: 2, img: "capacitor.jpg"},
-    {name: "1K Pot", price: 10, img: "pot.jpg"},
-    {name: "7 SEGMENT DISPLAY", price: 30, img: "7segment.jpg"},
-    {name: "BLDC Motor", price: 500, img: "bldc.jpg"},
-    {name: "Motor Driver", price: 150, img: "motordriver.jpg"},
-    {name: "Gear Motor", price: 300, img: "gearmotor.jpg"},
-    {name: "Transistor", price: 5, img: "transistor.jpg"},
-    {name: "0PCB", price: 40, img: "pcb.jpg"}
-];
-
-function makeSafeID(name) {
-    return name.replace(/\s+/g, '-');
-}
-
-function renderProducts() {
-    let container = document.getElementById('product-list');
-    products.forEach(p => {
-        let item = document.createElement('div');
-        item.className = 'listing';
-        item.innerHTML = `
-            <img src="${p.img}" alt="${p.name}">
-            <h2>${p.name}</h2>
-            <p>High-quality electronic component.</p>
-            <p class="price">₹${p.price}</p>
-            <div class="controls">
-                <button class="btn" onclick="addToCart('${p.name}', ${p.price})">+</button>
-                <span class="counter" id="counter-${makeSafeID(p.name)}">0</span>
-                <button class="btn btn-remove" onclick="removeFromCart('${p.name}')">-</button>
-            </div>
-        `;
-        container.appendChild(item);
-    });
-}
-
 function loadCounters() {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     cart.forEach(item => {
-        let counterEl = document.getElementById('counter-' + makeSafeID(item.name));
+        let counterEl = document.getElementById('counter-' + item.name);
         if (counterEl) {
             counterEl.textContent = item.quantity;
         }
@@ -194,31 +232,35 @@ function loadCounters() {
 function addToCart(productName, price) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let existingItem = cart.find(item => item.name === productName);
+
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
         cart.push({ name: productName, price: price, quantity: 1 });
     }
+
     localStorage.setItem('cart', JSON.stringify(cart));
-    document.getElementById('counter-' + makeSafeID(productName)).textContent = existingItem ? existingItem.quantity : 1;
+    document.getElementById('counter-' + productName).textContent = existingItem ? existingItem.quantity : 1;
 }
 
 function removeFromCart(productName) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let existingItem = cart.find(item => item.name === productName);
+
     if (existingItem && existingItem.quantity > 0) {
         existingItem.quantity -= 1;
         if (existingItem.quantity === 0) {
             cart = cart.filter(item => item.name !== productName);
         }
         localStorage.setItem('cart', JSON.stringify(cart));
-        document.getElementById('counter-' + makeSafeID(productName)).textContent = existingItem.quantity > 0 ? existingItem.quantity : 0;
+        document.getElementById('counter-' + productName).textContent = existingItem.quantity > 0 ? existingItem.quantity : 0;
     }
 }
 
 function filterProducts() {
     let input = document.getElementById('search').value.toLowerCase();
     let listings = document.querySelectorAll('.listing');
+
     listings.forEach(item => {
         let title = item.querySelector('h2').textContent.toLowerCase();
         let desc = item.querySelector('p').textContent.toLowerCase();
@@ -230,9 +272,19 @@ function filterProducts() {
     });
 }
 
-window.onload = () => { renderProducts(); loadCounters(); };
-</script>
-</div>
+document.querySelectorAll('.listing img').forEach(img => {
+    img.addEventListener('click', function() {
+        document.getElementById('imageModal').style.display = "block";
+        document.getElementById('modalImage').src = this.src;
+    });
+});
 
+function closeModal() {
+    document.getElementById('imageModal').style.display = "none";
+}
+
+window.onload = loadCounters;
+</script>
 </body>
 </html>
+
