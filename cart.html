@@ -31,6 +31,7 @@
 <div class="qr-section" id="payment-section">
     <p>Scan this QR code to make payment</p>
     <img src="payment-qr.png" alt="Payment QR Code">
+    <p><b>UPI ID:</b> example@upi</p>
 </div>
 
 <script>
@@ -65,7 +66,6 @@ function renderCart() {
     totalDiv.innerText = `Total: ₹${total}`;
     container.appendChild(totalDiv);
 
-    // Agar cart me kuch hai to Place Order button dikhaye
     orderBtn.style.display = "block";
 }
 
@@ -79,6 +79,9 @@ function deleteItem(index) {
 function placeOrder() {
     document.getElementById('payment-section').style.display = "block";
     document.getElementById('order-btn').style.display = "none";
+
+    // Clear cart
+    localStorage.removeItem('cart');
 }
 
 renderCart();
