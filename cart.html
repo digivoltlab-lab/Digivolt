@@ -22,23 +22,34 @@
             width: 60px; height: auto;
         }
         .qty-btn {
-            padding: 5px 10px; margin: 0 5px; border: none; background: #007bff; color: white; cursor: pointer;
+            padding: 5px 10px; margin: 0 5px; border: none; color: white; cursor: pointer;
             border-radius: 4px;
         }
-        .qty-btn:hover {
-            background: #0056b3;
+        .minus-btn { background: orange; }
+        .plus-btn { background: green; }
+        .delete-btn {
+            background: red; color: white; border: none; padding: 6px 10px;
+            border-radius: 4px; cursor: pointer;
         }
-        .total { font-weight: bold; font-size: 18px; margin-top: 10px; text-align: right; }
+        .total {
+            font-weight: bold; font-size: 18px; margin-top: 10px; text-align: right;
+        }
         .place-order {
             background: green; color: white; border: none; padding: 12px 20px;
             font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 10px; display: block; width: 100%;
         }
+        .back-btn {
+            background: #555; color: white; border: none; padding: 10px 15px;
+            font-size: 14px; border-radius: 5px; cursor: pointer; margin-bottom: 10px;
+        }
+        .back-btn:hover { background: #333; }
     </style>
 </head>
 <body>
 
 <div class="cart-container">
     <h2>Your Cart</h2>
+    <button class="back-btn" onclick="goBack()">⬅ Back to Products</button>
     <table>
         <thead>
             <tr>
@@ -47,6 +58,7 @@
                 <th>Qty</th>
                 <th>Price (1 pc)</th>
                 <th>Total</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody id="cart-items"></tbody>
@@ -56,7 +68,6 @@
 </div>
 
 <script>
-    // Product images mapping
     const productImages = {
         "Arduino Uno R3": "Arduino.jpg.jpg",
         "Raspberry Pi 4": "RaspberryPi.jpg"
@@ -72,22 +83,19 @@
         cart.forEach((item, index) => {
             let row = document.createElement("tr");
 
-            // Image cell
             let imgCell = document.createElement("td");
             let img = document.createElement("img");
             img.src = productImages[item.name] || "placeholder.jpg";
             img.alt = item.name;
             imgCell.appendChild(img);
 
-            // Product name
             let nameCell = document.createElement("td");
             nameCell.textContent = item.name;
 
-            // Quantity with buttons
             let qtyCell = document.createElement("td");
             let minusBtn = document.createElement("button");
             minusBtn.textContent = "-";
-            minusBtn.className = "qty-btn";
+            minusBtn.className = "qty-btn minus-btn";
             minusBtn.onclick = () => changeQuantity(index, -1);
 
             let qtyText = document.createElement("span");
@@ -95,29 +103,38 @@
 
             let plusBtn = document.createElement("button");
             plusBtn.textContent = "+";
-            plusBtn.className = "qty-btn";
+            plusBtn.className = "qty-btn plus-btn";
             plusBtn.onclick = () => changeQuantity(index, 1);
 
             qtyCell.appendChild(minusBtn);
             qtyCell.appendChild(qtyText);
             qtyCell.appendChild(plusBtn);
 
-            // Price (single unit)
             let priceCell = document.createElement("td");
             priceCell.textContent = `₹${item.price}`;
 
-            // Total price for that item
             let totalCell = document.createElement("td");
             let itemTotal = item.price * item.quantity;
             totalCell.textContent = `₹${itemTotal}`;
             totalPrice += itemTotal;
 
-            // Append all cells
+            let actionCell = document.createElement("td");
+            let delBtn = document.createElement("button");
+            delBtn.textContent = "Delete";
+            delBtn.className = "delete-btn";
+            delBtn.onclick = () => {
+                cart.splice(index, 1);
+                localStorage.setItem("cart", JSON.stringify(cart));
+                renderCart();
+            };
+            actionCell.appendChild(delBtn);
+
             row.appendChild(imgCell);
             row.appendChild(nameCell);
             row.appendChild(qtyCell);
             row.appendChild(priceCell);
             row.appendChild(totalCell);
+            row.appendChild(actionCell);
 
             cartItemsDiv.appendChild(row);
         });
@@ -157,6 +174,10 @@
         } else {
             alert("Your cart is empty!");
         }
+    }
+
+    function goBack() {
+        window.location.href = "listing.html"; // Apne products listing page ka naam yaha dalna
     }
 
     renderCart();
