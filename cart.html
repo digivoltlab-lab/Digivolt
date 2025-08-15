@@ -11,8 +11,6 @@
     .container { max-width: 800px; margin: auto; padding: 20px; }
     .item { background: white; padding: 10px; margin-bottom: 10px; border-radius: 5px; display: flex; justify-content: space-between; }
     .total { font-size: 1.2em; font-weight: bold; margin-top: 20px; }
-    .btn { padding: 10px 20px; background: #4facfe; color: white; border: none; border-radius: 5px; cursor: pointer; }
-    .btn:hover { background: #3a8fd0; }
 </style>
 </head>
 <body>
@@ -26,14 +24,16 @@ let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let container = document.getElementById('cart-container');
 let total = 0;
 
-if(cart.length === 0) {
+if (cart.length === 0) {
     container.innerHTML = "<p>Your cart is empty.</p>";
 } else {
     cart.forEach(item => {
-        total += item.price;
+        let itemTotal = item.price * item.quantity;
+        total += itemTotal;
+
         let div = document.createElement('div');
         div.classList.add('item');
-        div.innerHTML = `<span>${item.name}</span><span>₹${item.price}</span>`;
+        div.innerHTML = `<span>${item.name} (x${item.quantity})</span><span>₹${itemTotal}</span>`;
         container.appendChild(div);
     });
 
