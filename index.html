@@ -7,10 +7,9 @@
 <style>
     body {
         font-family: Arial, sans-serif;
-        background: url('https://i.imgur.com/2z8d1L2.png') repeat; /* PCB trace pattern */
-        background-size: cover;
         margin: 0;
         padding: 0;
+        background: #f5f5f5;
     }
     header {
         background-color: #3aa6ff;
@@ -179,13 +178,13 @@ document.querySelector('.buy-btn').addEventListener('click', function () {
     if (cart.length === 0) {
         alert("No items selected!");
     } else {
-        let message = "Your Order:\n";
+        let message = "🛒 Your Cart:\n";
         let grandTotal = 0;
         cart.forEach(p => {
             message += `${p.name} - ${p.qty} pcs = ₹${p.total}\n`;
             grandTotal += p.total;
         });
-        message += `\nGrand Total = ₹${grandTotal}`;
+        message += `\n💰 Grand Total = ₹${grandTotal}`;
         alert(message);
     }
 });
