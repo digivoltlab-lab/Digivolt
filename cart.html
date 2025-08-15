@@ -5,75 +5,54 @@
     <style>
         body { font-family: Arial, sans-serif; background-color: #f5f5f5; }
         .cart-container {
-            width: 80%; margin: 30px auto; background: white; padding: 20px;
+            width: 60%; margin: 30px auto; background: white; padding: 20px;
             border-radius: 10px; box-shadow: 0px 0px 10px #ccc;
         }
         h2 { text-align: center; }
-        table {
-            width: 100%; border-collapse: collapse; margin-top: 20px;
+        .cart-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 0; border-bottom: 1px solid #ddd;
         }
-        th, td {
-            border: 1px solid #ddd; padding: 10px; text-align: center;
+        .cart-item img {
+            width: 50px; height: 50px; object-fit: cover; border-radius: 5px;
+            margin-right: 10px;
         }
-        th {
-            background-color: #007bff; color: white;
-        }
-        img {
-            width: 60px; height: auto;
-        }
-        .qty-btn {
-            padding: 5px 10px; margin: 0 5px; border: none; color: white; cursor: pointer;
-            border-radius: 4px;
-        }
-        .minus-btn { background: orange; }
-        .plus-btn { background: green; }
+        .item-info { display: flex; align-items: center; }
         .delete-btn {
-            background: red; color: white; border: none; padding: 6px 10px;
-            border-radius: 4px; cursor: pointer;
+            background: #ff4d4d; color: white; border: none; padding: 5px 8px;
+            cursor: pointer; border-radius: 4px; transition: 0.3s;
         }
-        .total {
-            font-weight: bold; font-size: 18px; margin-top: 10px; text-align: right;
-        }
+        .delete-btn:hover { background: #cc0000; }
+        .total { font-weight: bold; font-size: 18px; margin-top: 10px; }
         .place-order {
-            background: green; color: white; border: none; padding: 12px 20px;
-            font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 10px; display: block; width: 100%;
+            background: green; color: white; border: none; padding: 10px 15px;
+            font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 10px;
         }
         .back-btn {
-            background: #555; color: white; border: none; padding: 10px 15px;
-            font-size: 14px; border-radius: 5px; cursor: pointer; margin-bottom: 10px;
+            background: #007bff; color: white; border: none; padding: 10px 15px;
+            font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 10px;
         }
-        .back-btn:hover { background: #333; }
     </style>
 </head>
 <body>
 
 <div class="cart-container">
     <h2>Your Cart</h2>
-    <button class="back-btn" onclick="goBack()">⬅ Back to Products</button>
-    <table>
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Product</th>
-                <th>Qty</th>
-                <th>Price (1 pc)</th>
-                <th>Total</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="cart-items"></tbody>
-    </table>
+    <div id="cart-items"></div>
     <div class="total" id="total-price">Total: ₹0</div>
     <button class="place-order" onclick="placeOrder()">Place Order</button>
+    <button class="back-btn" onclick="goBack()">⬅ Back to Shop</button>
 </div>
 
 <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
     const productImages = {
         "Arduino Uno R3": "Arduino.jpg.jpg",
-        "Raspberry Pi 4": "RaspberryPi.jpg"
+        "Raspberry Pi 0": "RaspberryPi.jpg",
+        "Resisters (1k), 100 pcs": "Resistors.jpg",
+        "ESP8266 WiFi Module": "esp.png"
     };
-
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     function renderCart() {
         let cartItemsDiv = document.getElementById("cart-items");
@@ -81,86 +60,55 @@
         cartItemsDiv.innerHTML = "";
 
         cart.forEach((item, index) => {
-            let row = document.createElement("tr");
+            let itemDiv = document.createElement("div");
+            itemDiv.classList.add("cart-item");
 
-            let imgCell = document.createElement("td");
+            let infoDiv = document.createElement("div");
+            infoDiv.classList.add("item-info");
+
             let img = document.createElement("img");
-            img.src = productImages[item.name] || "placeholder.jpg";
-            img.alt = item.name;
-            imgCell.appendChild(img);
+            img.src = productImages[item.name] || "default.jpg";
 
-            let nameCell = document.createElement("td");
-            nameCell.textContent = item.name;
+            let name = document.createElement("span");
+            name.textContent = `${item.name} (x${item.quantity})`;
 
-            let qtyCell = document.createElement("td");
-            let minusBtn = document.createElement("button");
-            minusBtn.textContent = "-";
-            minusBtn.className = "qty-btn minus-btn";
-            minusBtn.onclick = () => changeQuantity(index, -1);
+            infoDiv.appendChild(img);
+            infoDiv.appendChild(name);
 
-            let qtyText = document.createElement("span");
-            qtyText.textContent = item.quantity;
+            let price = document.createElement("span");
+            price.textContent = `₹${item.price * item.quantity}`;
+            totalPrice += item.price * item.quantity;
 
-            let plusBtn = document.createElement("button");
-            plusBtn.textContent = "+";
-            plusBtn.className = "qty-btn plus-btn";
-            plusBtn.onclick = () => changeQuantity(index, 1);
-
-            qtyCell.appendChild(minusBtn);
-            qtyCell.appendChild(qtyText);
-            qtyCell.appendChild(plusBtn);
-
-            let priceCell = document.createElement("td");
-            priceCell.textContent = `₹${item.price}`;
-
-            let totalCell = document.createElement("td");
-            let itemTotal = item.price * item.quantity;
-            totalCell.textContent = `₹${itemTotal}`;
-            totalPrice += itemTotal;
-
-            let actionCell = document.createElement("td");
             let delBtn = document.createElement("button");
             delBtn.textContent = "Delete";
-            delBtn.className = "delete-btn";
+            delBtn.classList.add("delete-btn");
             delBtn.onclick = () => {
                 cart.splice(index, 1);
                 localStorage.setItem("cart", JSON.stringify(cart));
                 renderCart();
             };
-            actionCell.appendChild(delBtn);
 
-            row.appendChild(imgCell);
-            row.appendChild(nameCell);
-            row.appendChild(qtyCell);
-            row.appendChild(priceCell);
-            row.appendChild(totalCell);
-            row.appendChild(actionCell);
-
-            cartItemsDiv.appendChild(row);
+            itemDiv.appendChild(infoDiv);
+            itemDiv.appendChild(price);
+            itemDiv.appendChild(delBtn);
+            cartItemsDiv.appendChild(itemDiv);
         });
 
         document.getElementById("total-price").textContent = `Total: ₹${totalPrice}`;
         return totalPrice;
     }
 
-    function changeQuantity(index, change) {
-        cart[index].quantity += change;
-        if (cart[index].quantity < 1) cart[index].quantity = 1;
-        localStorage.setItem("cart", JSON.stringify(cart));
-        renderCart();
-    }
-
     function sendWhatsAppOrder(totalAmount) {
-        let phoneNumber = "919899490935";
+        let phoneNumber = "919899490935"; // WhatsApp number (+91 without +)
         let message = "📦 *New Order Received!*\n\n";
         message += "🛍 *Order Details:*\n";
 
         cart.forEach(item => {
-            message += `• ${item.name} — x${item.quantity} — ₹${item.price * item.quantity}\n`;
+            message += `• ${item.name}  —  x${item.quantity}  —  ₹${item.price * item.quantity}\n`;
         });
 
         message += `\n💰 *Total Amount:* ₹${totalAmount}`;
-        message += `\n📅 Date: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
+        message += `\n\n📅 Date: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
         message += "\n\n✅ Please confirm the order.";
 
         let whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
@@ -171,13 +119,20 @@
         let totalAmount = renderCart();
         if (totalAmount > 0) {
             sendWhatsAppOrder(totalAmount);
+
+            let thankYou = document.createElement("h3");
+            thankYou.style.textAlign = "center";
+            thankYou.style.marginTop = "20px";
+            thankYou.style.color = "green";
+            thankYou.textContent = "Thank You for Shopping!";
+            document.querySelector(".cart-container").appendChild(thankYou);
         } else {
             alert("Your cart is empty!");
         }
     }
 
     function goBack() {
-        window.location.href = "listing.html"; // Apne products listing page ka naam yaha dalna
+        window.location.href = "index.html";
     }
 
     renderCart();
