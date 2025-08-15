@@ -9,8 +9,10 @@
     header { background: #4facfe; color: white; padding: 20px; text-align: center; }
     h1 { margin: 0; }
     .container { max-width: 800px; margin: auto; padding: 20px; }
-    .item { background: white; padding: 10px; margin-bottom: 10px; border-radius: 5px; display: flex; justify-content: space-between; }
+    .item { background: white; padding: 10px; margin-bottom: 10px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
     .total { font-size: 1.2em; font-weight: bold; margin-top: 20px; }
+    .btn-del { background: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+    .btn-del:hover { background: darkred; }
 </style>
 </head>
 <body>
@@ -20,20 +22,27 @@
 <div class="container" id="cart-container"></div>
 
 <script>
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
-let container = document.getElementById('cart-container');
-let total = 0;
+function renderCart() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let container = document.getElementById('cart-container');
+    container.innerHTML = ""; // Clear old content
+    let total = 0;
 
-if (cart.length === 0) {
-    container.innerHTML = "<p>Your cart is empty.</p>";
-} else {
-    cart.forEach(item => {
+    if (cart.length === 0) {
+        container.innerHTML = "<p>Your cart is empty.</p>";
+        return;
+    }
+
+    cart.forEach((item, index) => {
         let itemTotal = item.price * item.quantity;
         total += itemTotal;
 
         let div = document.createElement('div');
         div.classList.add('item');
-        div.innerHTML = `<span>${item.name} (x${item.quantity})</span><span>₹${itemTotal}</span>`;
+        div.innerHTML = `
+            <span>${item.name} (x${item.quantity}) - ₹${itemTotal}</span>
+            <button class="btn-del" onclick="deleteItem(${index})">Delete</button>
+        `;
         container.appendChild(div);
     });
 
@@ -42,6 +51,17 @@ if (cart.length === 0) {
     totalDiv.innerText = `Total: ₹${total}`;
     container.appendChild(totalDiv);
 }
+
+function deleteItem(index) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.splice(index, 1); // Remove item
+    localStorage.setItem('cart', JSON.stringify(cart));
+    renderCart(); // Refresh cart display
+}
+
+// First time render
+renderCart();
 </script>
 </body>
 </html>
+
