@@ -1,84 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Your Cart</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; }
-        header { background: #4da3ff; padding: 15px; text-align: center; color: white; font-size: 24px; font-weight: bold; }
-        .cart-item { background: white; margin: 10px auto; padding: 10px; border-radius: 8px; width: 80%; display: flex; justify-content: space-between; align-items: center; }
-        .delete-btn { background: red; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px; }
-        .total { font-size: 20px; font-weight: bold; text-align: center; margin-top: 20px; }
-        .order-btn { display: block; margin: 20px auto; padding: 10px 20px; font-size: 18px; background: green; color: white; border: none; cursor: pointer; border-radius: 8px; }
-        .qr-section { text-align: center; margin-top: 20px; display: none; }
-        .qr-section img { margin-top: 10px; }
-    </style>
+<meta charset="UTF-8">
+<title>Cart with UPI Payment</title>
+<style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; }
+    .cart-container { width: 60%; margin: auto; background: white; padding: 20px; border-radius: 10px; }
+    h2 { text-align: center; }
+    .item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #ddd; }
+    .total { font-weight: bold; font-size: 18px; margin-top: 10px; }
+    button { padding: 10px 20px; background: green; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: darkgreen; }
+    .qr-section { text-align: center; margin-top: 20px; }
+</style>
 </head>
 <body>
 
-<header>Your Cart</header>
-<div id="cart-items"></div>
-<div class="total" id="total-price">Total: ₹0</div>
-<button class="order-btn" id="placeOrderBtn">Place Order</button>
+<div class="cart-container">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <p class="total" id="total-price">Total: ₹0</p>
+    <button onclick="placeOrder()">Place Order</button>
 
-<div class="qr-section" id="payment-section">
-    <p><b>Scan this QR code to make payment</b></p>
-    <img id="qrCode" alt="Payment QR Code" width="200">
-    <p><b>UPI ID:</b> <a id="upiLink" target="_blank"></a></p>
+    <div class="qr-section" id="qr-section" style="display:none;">
+        <h3>Scan to Pay</h3>
+        <img id="qrCode" width="200">
+        <p><b>UPI ID:</b> 9582420851@yapl</p>
+    </div>
 </div>
 
 <script>
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart = [
+    { name: "Arduino Uno R3", price: 1100, qty: 2 },
+    { name: "Raspberry Pi 4", price: 4200, qty: 1 }
+];
 
-// Display cart
 function renderCart() {
-    let cartContainer = document.getElementById("cart-items");
-    cartContainer.innerHTML = "";
+    let container = document.getElementById("cart-items");
+    container.innerHTML = "";
     let total = 0;
 
-    cart.forEach((item, index) => {
-        total += item.price * item.quantity;
-        cartContainer.innerHTML += `
-            <div class="cart-item">
-                ${item.name} (x${item.quantity}) - ₹${item.price * item.quantity}
-                <button class="delete-btn" onclick="deleteItem(${index})">Delete</button>
-            </div>
-        `;
+    cart.forEach(item => {
+        let div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `<span>${item.name} (x${item.qty})</span> <span>₹${item.price * item.qty}</span>`;
+        container.appendChild(div);
+        total += item.price * item.qty;
     });
 
-    document.getElementById("total-price").innerText = "Total: ₹" + total;
+    document.getElementById("total-price").textContent = `Total: ₹${total}`;
     return total;
 }
 
-// Delete item
-function deleteItem(index) {
-    cart.splice(index, 1);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart();
-}
-
-// Show QR code
-function showPaymentSection(totalAmount) {
+function generateQR(amount) {
     let upiID = "9582420851@yapl";
     let name = "Digivolt Store";
-    let upiLink = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(name)}&am=${totalAmount}&cu=INR`;
-    let qrCodeURL = `https://chart.googleapis.com/chart?cht=qr&chs=250x250&chl=${encodeURIComponent(upiLink)}`;
-
-    document.getElementById("qrCode").src = qrCodeURL;
-    document.getElementById("upiLink").href = upiLink;
-    document.getElementById("upiLink").innerText = upiID;
-
-    document.getElementById("payment-section").style.display = "block";
+    let upiLink = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR`;
+    let qrURL = `https://chart.googleapis.com/chart?cht=qr&chs=250x250&chl=${encodeURIComponent(upiLink)}`;
+    document.getElementById("qrCode").src = qrURL;
 }
 
-document.getElementById("placeOrderBtn").addEventListener("click", function(){
-    let total = renderCart();
-    if (total > 0) {
-        showPaymentSection(total);
-    } else {
-        alert("Your cart is empty!");
-    }
-});
+function placeOrder() {
+    let totalAmount = renderCart();
+    generateQR(totalAmount);
+    document.getElementById("qr-section").style.display = "block";
+}
 
+// Initial render
 renderCart();
 </script>
 
