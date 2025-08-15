@@ -19,31 +19,37 @@
         box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
     h1 { margin: 0; }
-    .container { max-width: 1000px; margin: auto; padding: 20px; }
+    .container { 
+        max-width: 1200px; 
+        margin: auto; 
+        padding: 20px; 
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
     .listing { 
         background: white; 
         padding: 15px; 
-        margin-bottom: 15px; 
         border-radius: 10px; 
         box-shadow: 0px 4px 10px rgba(0,0,0,0.1); 
         border-left: 5px solid #4cafef; 
         transition: transform 0.2s;
+        text-align: center;
     }
     .listing:hover {
         transform: scale(1.02);
         border-left-color: #00c853;
     }
     .listing img {
-        width: 150px;
-        height: 150px;
+        width: 100%;
+        height: 180px;
         object-fit: cover;
         border-radius: 10px;
         margin-bottom: 10px;
-        display: block;
     }
-    .listing h2 { margin: 0 0 10px; color: #01579b; }
-    .listing p { margin: 0 0 10px; color: #555; }
-    .price { color: green; font-weight: bold; }
+    .listing h2 { margin: 0 0 10px; color: #01579b; font-size: 1.2em; }
+    .listing p { margin: 0 0 10px; color: #555; font-size: 0.95em; }
+    .price { color: green; font-weight: bold; font-size: 1.1em; }
     .btn { 
         display: inline-block; 
         width: 40px; height: 40px; 
@@ -81,6 +87,21 @@
     }
     .btn-remove { background: #f44336; }
     .btn-remove:hover { background: #d32f2f; }
+
+    /* 📱 Mobile adjustments */
+    @media (max-width: 600px) {
+        header { padding: 15px; }
+        .buy-btn {
+            position: static;
+            display: block;
+            margin: 10px auto 0;
+            transform: none;
+            text-align: center;
+        }
+        .listing img {
+            height: 150px;
+        }
+    }
 </style>
 </head>
 <body>
