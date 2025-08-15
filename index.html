@@ -11,11 +11,14 @@
         margin: 0; padding: 0; 
     }
     header { 
-        background: #0288d1; 
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(8px);
+        background: rgba(2, 136, 209, 0.9);
         color: white; 
         padding: 20px; 
         text-align: center; 
-        position: relative; 
         box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
     h1 { margin: 0; }
@@ -25,12 +28,37 @@
     .search-box input {
         width: 80%;
         max-width: 400px;
-        padding: 8px;
-        border-radius: 5px;
+        padding: 10px;
+        border-radius: 25px;
         border: none;
         outline: none;
         font-size: 16px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
+
+    /* Filter bar */
+    .filter-bar {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 15px 0;
+        flex-wrap: wrap;
+    }
+    .filter-btn {
+        background: #ffffff;
+        color: #0288d1;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: bold;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+    .filter-btn:hover {
+        background: #0288d1;
+        color: white;
+    }
+
     .container { 
         max-width: 1200px; 
         margin: auto; 
@@ -45,11 +73,12 @@
         border-radius: 10px; 
         box-shadow: 0px 4px 10px rgba(0,0,0,0.1); 
         border-left: 5px solid #4cafef; 
-        transition: transform 0.2s;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
         text-align: center;
     }
     .listing:hover {
-        transform: scale(1.02);
+        transform: scale(1.03);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         border-left-color: #00c853;
     }
     .listing img {
@@ -59,6 +88,10 @@
         border-radius: 10px;
         margin-bottom: 10px;
         cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+    .listing img:hover {
+        transform: scale(1.05);
     }
     .listing h2 { margin: 0 0 10px; color: #01579b; font-size: 1.2em; }
     .listing p { margin: 0 0 10px; color: #555; font-size: 0.95em; }
@@ -152,12 +185,18 @@
     <div class="search-box">
         <input type="text" id="search" placeholder="Search products..." onkeyup="filterProducts()">
     </div>
+    <div class="filter-bar">
+        <button class="filter-btn" onclick="filterCategory('all')">All</button>
+        <button class="filter-btn" onclick="filterCategory('arduino')">Arduino</button>
+        <button class="filter-btn" onclick="filterCategory('raspberry')">Raspberry Pi</button>
+        <button class="filter-btn" onclick="filterCategory('module')">Modules</button>
+    </div>
     <a href="cart.html" class="btn buy-btn">Buy</a>
 </header>
 
 <div class="container" id="product-list">
 
-    <div class="listing">
+    <div class="listing" data-category="arduino">
         <img src="Arduino.jpg.jpg" alt="Arduino Uno R3">
         <h2>Arduino Uno R3</h2>
         <p>High-quality microcontroller board for electronics projects.</p>
@@ -167,7 +206,7 @@
         <button class="btn btn-remove" onclick="removeFromCart('Arduino Uno R3')">-</button>
     </div>
 
-    <div class="listing">
+    <div class="listing" data-category="raspberry">
         <img src="RaspberryPi.jpg" alt="Raspberry Pi 0">
         <h2>Raspberry Pi 0</h2>
         <p>Mini computer for coding, IoT, and robotics.</p>
@@ -177,7 +216,7 @@
         <button class="btn btn-remove" onclick="removeFromCart('Raspberry Pi 0')">-</button>
     </div>
 
-    <div class="listing">
+    <div class="listing" data-category="component">
         <img src="Resistors.jpg" alt="Resisters (1k), 100 pcs">
         <h2>Resisters (1k), 100 pcs</h2>
         <p>Pack of resistors for electronics projects.</p>
@@ -187,7 +226,7 @@
         <button class="btn btn-remove" onclick="removeFromCart('Resisters (1k), 100 pcs')">-</button>
     </div>
 
-    <div class="listing">
+    <div class="listing" data-category="module">
         <img src="esp.png" alt="ESP8266 WiFi Module">
         <h2>ESP8266 WiFi Module</h2>
         <p>Wireless module for IoT projects.</p>
@@ -253,6 +292,18 @@ function filterProducts() {
         let title = item.querySelector('h2').textContent.toLowerCase();
         let desc = item.querySelector('p').textContent.toLowerCase();
         if (title.includes(input) || desc.includes(input)) {
+            item.style.display = "";
+        } else {
+            item.style.display = "none";
+        }
+    });
+}
+
+// 🔹 Category filter
+function filterCategory(category) {
+    let listings = document.querySelectorAll('.listing');
+    listings.forEach(item => {
+        if (category === 'all' || item.dataset.category === category) {
             item.style.display = "";
         } else {
             item.style.display = "none";
