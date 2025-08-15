@@ -5,33 +5,161 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Digivolt - Listings</title>
 <style>
-    body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #e0f7fa, #e3f2fd); margin: 0; padding: 0; }
-    header { background: #0288d1; color: white; padding: 20px; text-align: center; position: relative; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+    body { 
+        font-family: Arial, sans-serif; 
+        background: linear-gradient(135deg, #e0f7fa, #e3f2fd);
+        margin: 0; padding: 0; 
+    }
+    header { 
+        background: #0288d1; 
+        color: white; 
+        padding: 20px; 
+        text-align: center; 
+        position: relative; 
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
     h1 { margin: 0; }
-    .search-box { margin-top: 10px; }
-    .search-box input { width: 80%; max-width: 400px; padding: 8px; border-radius: 5px; border: none; outline: none; font-size: 16px; }
-    .container { max-width: 1200px; margin: auto; padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-    .category-title { grid-column: 1/-1; font-size: 1.5em; font-weight: bold; color: #01579b; border-bottom: 3px solid #4cafef; padding-bottom: 5px; margin-top: 20px; }
-    .listing { background: white; padding: 15px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); border-left: 5px solid #4cafef; transition: transform 0.2s; text-align: center; }
-    .listing:hover { transform: scale(1.02); border-left-color: #00c853; }
-    .listing img { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; cursor: pointer; }
+    .search-box {
+        margin-top: 10px;
+    }
+    .search-box input {
+        width: 80%;
+        max-width: 400px;
+        padding: 8px;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        font-size: 16px;
+    }
+    .category {
+        grid-column: 1 / -1;
+        background: #01579b;
+        color: white;
+        padding: 10px;
+        font-size: 1.2em;
+        font-weight: bold;
+        position: sticky;
+        top: 0;
+        z-index: 5;
+    }
+    .container { 
+        max-width: 1200px; 
+        margin: auto; 
+        padding: 20px; 
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    .listing { 
+        background: white; 
+        padding: 15px; 
+        border-radius: 10px; 
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.1); 
+        border-left: 5px solid #4cafef; 
+        transition: transform 0.2s;
+        text-align: center;
+    }
+    .listing:hover {
+        transform: scale(1.02);
+        border-left-color: #00c853;
+    }
+    .listing img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
     .listing h2 { margin: 0 0 10px; color: #01579b; font-size: 1.2em; }
     .listing p { margin: 0 0 10px; color: #555; font-size: 0.95em; }
     .price { color: green; font-weight: bold; font-size: 1.1em; }
-    .btn { display: inline-block; width: 40px; height: 40px; background: #4cafef; color: white; font-size: 20px; text-align: center; line-height: 40px; text-decoration: none; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; }
+    .btn { 
+        display: inline-block; 
+        width: 40px; height: 40px; 
+        background: #4cafef; 
+        color: white; 
+        font-size: 20px; 
+        text-align: center; 
+        line-height: 40px; 
+        text-decoration: none; 
+        border-radius: 8px; 
+        cursor: pointer; 
+        border: none; 
+        font-weight: bold;
+    }
     .btn:hover { background: #3a8fd0; }
-    .counter { display: inline-block; background: #2196F3; color: white; padding: 5px 10px; margin: 0 10px; border-radius: 50%; font-weight: bold; min-width: 28px; text-align: center; }
+    .counter { 
+        display: inline-block; 
+        background: #2196F3; 
+        color: white; 
+        padding: 5px 10px; 
+        margin: 0 10px; 
+        border-radius: 50%; 
+        font-weight: bold; 
+        min-width: 28px; 
+        text-align: center; 
+    }
     .btn-remove { background: #f44336; }
     .btn-remove:hover { background: #d32f2f; }
-    .buy-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: linear-gradient(45deg, #ff5722, #ff9800); padding: 12px 25px; border-radius: 50px; font-size: 18px; font-weight: bold; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.3); color: white; transition: all 0.3s ease; }
-    .buy-btn:hover { background: linear-gradient(45deg, #ff9800, #ff5722); transform: translateY(-50%) scale(1.05); box-shadow: 0 6px 15px rgba(0,0,0,0.4); }
-    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8); }
-    .modal-content { display: block; margin: 5% auto; max-width: 90%; border-radius: 10px; }
-    .close { position: absolute; top: 20px; right: 35px; color: white; font-size: 40px; font-weight: bold; cursor: pointer; }
+    .buy-btn { 
+        position: absolute; 
+        right: 20px; 
+        top: 50%; 
+        transform: translateY(-50%); 
+        background: linear-gradient(45deg, #ff5722, #ff9800);
+        padding: 12px 25px;
+        border-radius: 50px;
+        font-size: 18px;
+        font-weight: bold;
+        text-transform: uppercase;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        color: white;
+        transition: all 0.3s ease;
+    }
+    .buy-btn:hover { 
+        background: linear-gradient(45deg, #ff9800, #ff5722);
+        transform: translateY(-50%) scale(1.05);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.8);
+    }
+    .modal-content {
+        display: block;
+        margin: 5% auto;
+        max-width: 90%;
+        border-radius: 10px;
+    }
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
     @media (max-width: 600px) {
         header { padding: 15px; }
-        .buy-btn { position: static; display: block; margin: 10px auto 0; transform: none; text-align: center; }
-        .listing img { height: 150px; }
+        .buy-btn {
+            position: static;
+            display: block;
+            margin: 10px auto 0;
+            transform: none;
+            text-align: center;
+        }
+        .listing img {
+            height: 150px;
+        }
     }
 </style>
 </head>
@@ -47,26 +175,29 @@
 
 <div class="container" id="product-list">
 
-    <!-- ===== Modules ===== -->
-    <div class="category-title">Modules</div>
+    <!-- Category 1: Modules -->
+    <div class="category">Modules</div>
+
     <div class="listing">
         <img src="Arduino.jpg.jpg" alt="Arduino Uno R3">
         <h2>Arduino Uno R3</h2>
-        <p>High-quality microcontroller board.</p>
+        <p>High-quality microcontroller board for electronics projects.</p>
         <p class="price">₹310</p>
         <button class="btn" onclick="addToCart('Arduino Uno R3', 310)">+</button>
         <span class="counter" id="counter-Arduino Uno R3">0</span>
         <button class="btn btn-remove" onclick="removeFromCart('Arduino Uno R3')">-</button>
     </div>
+
     <div class="listing">
         <img src="RaspberryPi.jpg" alt="Raspberry Pi 0">
         <h2>Raspberry Pi 0</h2>
-        <p>Mini computer for IoT & robotics.</p>
+        <p>Mini computer for coding, IoT, and robotics.</p>
         <p class="price">₹920</p>
         <button class="btn" onclick="addToCart('Raspberry Pi 0', 920)">+</button>
         <span class="counter" id="counter-Raspberry Pi 0">0</span>
         <button class="btn btn-remove" onclick="removeFromCart('Raspberry Pi 0')">-</button>
     </div>
+
     <div class="listing">
         <img src="esp.png" alt="ESP8266 WiFi Module">
         <h2>ESP8266 WiFi Module</h2>
@@ -77,7 +208,8 @@
         <button class="btn btn-remove" onclick="removeFromCart('ESP8266 WiFi Module')">-</button>
     </div>
 
-    <!-- बाकी categories यहां इसी format में आएंगी -->
+    <!-- बाकी categories & products यहाँ से जारी रहेंगे... -->
+
 </div>
 
 <!-- Modal -->
@@ -91,44 +223,66 @@ function loadCounters() {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     cart.forEach(item => {
         let counterEl = document.getElementById('counter-' + item.name);
-        if (counterEl) counterEl.textContent = item.quantity;
+        if (counterEl) {
+            counterEl.textContent = item.quantity;
+        }
     });
 }
+
 function addToCart(productName, price) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let existingItem = cart.find(item => item.name === productName);
-    if (existingItem) existingItem.quantity += 1;
-    else cart.push({ name: productName, price: price, quantity: 1 });
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({ name: productName, price: price, quantity: 1 });
+    }
+
     localStorage.setItem('cart', JSON.stringify(cart));
     document.getElementById('counter-' + productName).textContent = existingItem ? existingItem.quantity : 1;
 }
+
 function removeFromCart(productName) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let existingItem = cart.find(item => item.name === productName);
+
     if (existingItem && existingItem.quantity > 0) {
         existingItem.quantity -= 1;
-        if (existingItem.quantity === 0) cart = cart.filter(item => item.name !== productName);
+        if (existingItem.quantity === 0) {
+            cart = cart.filter(item => item.name !== productName);
+        }
         localStorage.setItem('cart', JSON.stringify(cart));
         document.getElementById('counter-' + productName).textContent = existingItem.quantity > 0 ? existingItem.quantity : 0;
     }
 }
+
 function filterProducts() {
     let input = document.getElementById('search').value.toLowerCase();
-    let listings = document.querySelectorAll('.listing, .category-title');
+    let listings = document.querySelectorAll('.listing');
+
     listings.forEach(item => {
-        if (item.classList.contains('category-title')) return;
         let title = item.querySelector('h2').textContent.toLowerCase();
         let desc = item.querySelector('p').textContent.toLowerCase();
-        item.style.display = (title.includes(input) || desc.includes(input)) ? "" : "none";
+        if (title.includes(input) || desc.includes(input)) {
+            item.style.display = "";
+        } else {
+            item.style.display = "none";
+        }
     });
 }
+
 document.querySelectorAll('.listing img').forEach(img => {
     img.addEventListener('click', function() {
         document.getElementById('imageModal').style.display = "block";
         document.getElementById('modalImage').src = this.src;
     });
 });
-function closeModal() { document.getElementById('imageModal').style.display = "none"; }
+
+function closeModal() {
+    document.getElementById('imageModal').style.display = "none";
+}
+
 window.onload = loadCounters;
 </script>
 </body>
