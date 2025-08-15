@@ -3,60 +3,21 @@
 <head>
     <title>Your Cart</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-        }
+        body { font-family: Arial, sans-serif; background-color: #f5f5f5; }
         .cart-container {
-            width: 60%;
-            margin: 30px auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px #ccc;
+            width: 60%; margin: 30px auto; background: white; padding: 20px;
+            border-radius: 10px; box-shadow: 0px 0px 10px #ccc;
         }
-        h2 {
-            text-align: center;
-        }
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #ddd;
-        }
+        h2 { text-align: center; }
+        .cart-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #ddd; }
         .cart-item button {
-            background: red;
-            color: white;
-            border: none;
-            padding: 5px 8px;
-            cursor: pointer;
-            border-radius: 4px;
+            background: red; color: white; border: none; padding: 5px 8px;
+            cursor: pointer; border-radius: 4px;
         }
-        .total {
-            font-weight: bold;
-            font-size: 18px;
-            margin-top: 10px;
-        }
+        .total { font-weight: bold; font-size: 18px; margin-top: 10px; }
         .place-order {
-            background: green;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        #qr-section {
-            margin-top: 20px;
-            text-align: center;
-            display: none;
-        }
-        #qr-section img {
-            margin: 10px 0;
-        }
-        .upi-link {
-            font-weight: bold;
+            background: green; color: white; border: none; padding: 10px 15px;
+            font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 10px;
         }
     </style>
 </head>
@@ -67,14 +28,6 @@
     <div id="cart-items"></div>
     <div class="total" id="total-price">Total: ₹0</div>
     <button class="place-order" onclick="placeOrder()">Place Order</button>
-
-    <div id="qr-section">
-        <h3>Scan to Pay</h3>
-        <img id="payment-qr" src="" alt="Payment QR Code" width="200">
-        <p class="upi-link">
-            UPI ID: <a id="upi-link" href="" target="_blank">9582420851@yapl</a>
-        </p>
-    </div>
 </div>
 
 <script>
@@ -114,22 +67,21 @@
         return totalPrice;
     }
 
-    function generateQR(amount) {
-        let upiID = "9582420851@yapl";
-        let name = "Electronics Store";
-        let txnNote = "Order Payment";
-        let upiLink = `upi://pay?pa=${upiID}&pn=${name}&am=${amount}&cu=INR&tn=${txnNote}`;
-        
-        let qrAPI = `https://chart.googleapis.com/chart?cht=qr&chs=250x250&chl=${encodeURIComponent(upiLink)}`;
-        document.getElementById("payment-qr").src = qrAPI;
-        document.getElementById("upi-link").href = upiLink;
+    function sendWhatsAppOrder(totalAmount) {
+        let phoneNumber = "919582420851"; // WhatsApp number (+91 without +)
+        let message = "🛒 *New Order Details:*\n\n";
+        cart.forEach(item => {
+            message += `• ${item.name} (x${item.quantity}) - ₹${item.price * item.quantity}\n`;
+        });
+        message += `\n💰 *Total:* ₹${totalAmount}`;
+        let whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappLink, "_blank");
     }
 
     function placeOrder() {
         let totalAmount = renderCart();
         if (totalAmount > 0) {
-            generateQR(totalAmount);
-            document.getElementById("qr-section").style.display = "block";
+            sendWhatsAppOrder(totalAmount);
 
             let thankYou = document.createElement("h3");
             thankYou.style.textAlign = "center";
