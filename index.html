@@ -19,9 +19,7 @@
         box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
     h1 { margin: 0; }
-    .search-box {
-        margin-top: 10px;
-    }
+    .search-box { margin-top: 10px; }
     .search-box input {
         width: 80%;
         max-width: 400px;
@@ -48,10 +46,7 @@
         transition: transform 0.2s;
         text-align: center;
     }
-    .listing:hover {
-        transform: scale(1.02);
-        border-left-color: #00c853;
-    }
+    .listing:hover { transform: scale(1.02); border-left-color: #00c853; }
     .listing img {
         width: 100%;
         height: 180px;
@@ -152,9 +147,7 @@
             transform: none;
             text-align: center;
         }
-        .listing img {
-            height: 150px;
-        }
+        .listing img { height: 150px; }
     }
 </style>
 </head>
@@ -170,29 +163,7 @@
 
 <div class="container" id="product-list">
 
-    <div class="listing">
-        <img src="Arduino.jpg.jpg" alt="Arduino Uno R3">
-        <h2>Arduino Uno R3</h2>
-        <p>High-quality microcontroller board for electronics projects.</p>
-        <p class="price">₹310</p>
-        <button class="btn" onclick="addToCart('Arduino Uno R3', 310)">+</button>
-        <span class="counter" id="counter-Arduino Uno R3">0</span>
-        <button class="btn btn-remove" onclick="removeFromCart('Arduino Uno R3')">-</button>
-    </div>
-
-    <div class="listing">
-        <img src="RaspberryPi.jpg" alt="Raspberry Pi 0">
-        <h2>Raspberry Pi 0</h2>
-        <p>Mini computer for coding, IoT, and robotics.</p>
-        <p class="price">₹920</p>
-        <button class="btn" onclick="addToCart('Raspberry Pi 0', 920)">+</button>
-        <span class="counter" id="counter-Raspberry Pi 0">0</span>
-        <button class="btn btn-remove" onclick="removeFromCart('Raspberry Pi 0')">-</button>
-    </div>
-
-    <div class="container" id="product-list">
-
-    <!-- Existing Products -->
+    <!-- 4 existing products (unchanged image paths) -->
     <div class="listing">
         <img src="Arduino.jpg.jpg" alt="Arduino Uno R3">
         <h2>Arduino Uno R3</h2>
@@ -233,78 +204,385 @@
         <button class="btn btn-remove" onclick="removeFromCart('ESP8266 WiFi Module')">-</button>
     </div>
 
-    <!-- New Products -->
+    <!-- 38 new products from your table (image src intentionally left blank) -->
     <div class="listing">
-        <img src="bldc.jpg" alt="BLDC Motor">
-        <h2>BLDC Motor</h2>
-        <p>High efficiency brushless DC motor for robotics.</p>
-        <p class="price">₹1500</p>
-        <button class="btn" onclick="addToCart('BLDC Motor', 1500)">+</button>
-        <span class="counter" id="counter-BLDC Motor">0</span>
-        <button class="btn btn-remove" onclick="removeFromCart('BLDC Motor')">-</button>
+        <img src="" alt="Breadboard WISH WB 150">
+        <h2>Breadboard WISH WB 150</h2>
+        <p>Standard solderless breadboard.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('Breadboard WISH WB 150', 0)">+</button>
+        <span class="counter" id="counter-Breadboard WISH WB 150">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Breadboard WISH WB 150')">-</button>
     </div>
 
     <div class="listing">
-        <img src="motor_driver.jpg" alt="Motor Driver">
-        <h2>Motor Driver</h2>
-        <p>Controller for running DC and BLDC motors.</p>
-        <p class="price">₹450</p>
-        <button class="btn" onclick="addToCart('Motor Driver', 450)">+</button>
-        <span class="counter" id="counter-Motor Driver">0</span>
-        <button class="btn btn-remove" onclick="removeFromCart('Motor Driver')">-</button>
+        <img src="" alt="Wire Stripper EGO 150B">
+        <h2>Wire Stripper EGO 150B</h2>
+        <p>Tool for stripping wire insulation.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('Wire Stripper EGO 150B', 0)">+</button>
+        <span class="counter" id="counter-Wire Stripper EGO 150B">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Wire Stripper EGO 150B')">-</button>
     </div>
 
     <div class="listing">
-        <img src="gear_motor.jpg" alt="Gear Motor">
-        <h2>Gear Motor</h2>
-        <p>Motor with gear system for high torque applications.</p>
-        <p class="price">₹600</p>
-        <button class="btn" onclick="addToCart('Gear Motor', 600)">+</button>
-        <span class="counter" id="counter-Gear Motor">0</span>
-        <button class="btn btn-remove" onclick="removeFromCart('Gear Motor')">-</button>
+        <img src="" alt="Berg Wires F-F">
+        <h2>Berg Wires F-F</h2>
+        <p>Female to Female jumper wires.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('Berg Wires F-F', 0)">+</button>
+        <span class="counter" id="counter-Berg Wires F-F">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Berg Wires F-F')">-</button>
     </div>
 
     <div class="listing">
-        <img src="transistor.jpg" alt="Transistor">
-        <h2>Transistor</h2>
-        <p>Semiconductor device for switching and amplification.</p>
-        <p class="price">₹10</p>
-        <button class="btn" onclick="addToCart('Transistor', 10)">+</button>
-        <span class="counter" id="counter-Transistor">0</span>
-        <button class="btn btn-remove" onclick="removeFromCart('Transistor')">-</button>
+        <img src="" alt="Berg Wires M-M">
+        <h2>Berg Wires M-M</h2>
+        <p>Male to Male jumper wires.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('Berg Wires M-M', 0)">+</button>
+        <span class="counter" id="counter-Berg Wires M-M">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Berg Wires M-M')">-</button>
     </div>
 
     <div class="listing">
-        <img src="t_motor.jpg" alt="T Motor">
-        <h2>T Motor</h2>
-        <p>High-performance motor for drones and robotics.</p>
-        <p class="price">₹2000</p>
-        <button class="btn" onclick="addToCart('T Motor', 2000)">+</button>
-        <span class="counter" id="counter-T Motor">0</span>
-        <button class="btn btn-remove" onclick="removeFromCart('T Motor')">-</button>
-    </div>
-
-</div>
-
-
-    <div class="listing">
-        <img src="Resistors.jpg" alt="Resisters (1k), 100 pcs">
-        <h2>Resisters (1k), 100 pcs</h2>
-        <p>Pack of resistors for electronics projects.</p>
-        <p class="price">₹40</p>
-        <button class="btn" onclick="addToCart('Resisters (1k), 100 pcs', 40)">+</button>
-        <span class="counter" id="counter-Resisters (1k), 100 pcs">0</span>
-        <button class="btn btn-remove" onclick="removeFromCart('Resisters (1k), 100 pcs')">-</button>
+        <img src="" alt="Berg Wires M-F">
+        <h2>Berg Wires M-F</h2>
+        <p>Male to Female jumper wires.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('Berg Wires M-F', 0)">+</button>
+        <span class="counter" id="counter-Berg Wires M-F">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Berg Wires M-F')">-</button>
     </div>
 
     <div class="listing">
-        <img src="esp.png" alt="ESP8266 WiFi Module">
-        <h2>ESP8266 WiFi Module</h2>
-        <p>Wireless module for IoT projects.</p>
-        <p class="price">₹140</p>
-        <button class="btn" onclick="addToCart('ESP8266 WiFi Module', 140)">+</button>
-        <span class="counter" id="counter-ESP8266 WiFi Module">0</span>
-        <button class="btn btn-remove" onclick="removeFromCart('ESP8266 WiFi Module')">-</button>
+        <img src="" alt="Resistor 15KOHM 1/4 Watt MFR">
+        <h2>Resistor 15KOHM 1/4 Watt MFR</h2>
+        <p>15kΩ 0.25W metal film resistor.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('Resistor 15KOHM 1/4 Watt MFR', 0)">+</button>
+        <span class="counter" id="counter-Resistor 15KOHM 1/4 Watt MFR">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Resistor 15KOHM 1/4 Watt MFR')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="1k ohm resistor">
+        <h2>1k ohm resistor</h2>
+        <p>1kΩ through-hole resistor.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('1k ohm resistor', 0)">+</button>
+        <span class="counter" id="counter-1k ohm resistor">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('1k ohm resistor')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="10k ohm resistor">
+        <h2>10k ohm resistor</h2>
+        <p>10kΩ through-hole resistor.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('10k ohm resistor', 0)">+</button>
+        <span class="counter" id="counter-10k ohm resistor">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('10k ohm resistor')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="100k ohm resistor">
+        <h2>100k ohm resistor</h2>
+        <p>100kΩ through-hole resistor.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('100k ohm resistor', 0)">+</button>
+        <span class="counter" id="counter-100k ohm resistor">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('100k ohm resistor')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="220k ohm resistor">
+        <h2>220k ohm resistor</h2>
+        <p>220kΩ through-hole resistor.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('220k ohm resistor', 0)">+</button>
+        <span class="counter" id="counter-220k ohm resistor">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('220k ohm resistor')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="330k ohm resistor">
+        <h2>330k ohm resistor</h2>
+        <p>330kΩ through-hole resistor.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('330k ohm resistor', 0)">+</button>
+        <span class="counter" id="counter-330k ohm resistor">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('330k ohm resistor')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="Diode IN4007">
+        <h2>Diode IN4007</h2>
+        <p>General purpose rectifier diode.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('Diode IN4007', 0)">+</button>
+        <span class="counter" id="counter-Diode IN4007">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Diode IN4007')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="Zener diode 3.6 V">
+        <h2>Zener diode 3.6 V</h2>
+        <p>3.6V zener reference diode.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('Zener diode 3.6 V', 0)">+</button>
+        <span class="counter" id="counter-Zener diode 3.6 V">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Zener diode 3.6 V')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="MOSFET IRF 640">
+        <h2>MOSFET IRF 640</h2>
+        <p>N-channel MOSFET.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('MOSFET IRF 640', 0)">+</button>
+        <span class="counter" id="counter-MOSFET IRF 640">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('MOSFET IRF 640')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="BJT 2N2222 (metal packaging)">
+        <h2>BJT 2N2222 (metal packaging)</h2>
+        <p>NPN transistor (metal can).</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('BJT 2N2222 (metal packaging)', 0)">+</button>
+        <span class="counter" id="counter-BJT 2N2222 (metal packaging)">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('BJT 2N2222 (metal packaging)')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="LDR small size 5mm">
+        <h2>LDR small size 5mm</h2>
+        <p>Photoresistor light sensor.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('LDR small size 5mm', 0)">+</button>
+        <span class="counter" id="counter-LDR small size 5mm">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('LDR small size 5mm')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="LED red 3 mm">
+        <h2>LED red 3 mm</h2>
+        <p>3mm Red LED indicator.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('LED red 3 mm', 0)">+</button>
+        <span class="counter" id="counter-LED red 3 mm">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('LED red 3 mm')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="1nF ceramic capacitor">
+        <h2>1nF ceramic capacitor</h2>
+        <p>Ceramic disc capacitor.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('1nF ceramic capacitor', 0)">+</button>
+        <span class="counter" id="counter-1nF ceramic capacitor">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('1nF ceramic capacitor')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="10nF ceramic capacitor">
+        <h2>10nF ceramic capacitor</h2>
+        <p>Ceramic disc capacitor.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('10nF ceramic capacitor', 0)">+</button>
+        <span class="counter" id="counter-10nF ceramic capacitor">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('10nF ceramic capacitor')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="100nF ceramic capacitor">
+        <h2>100nF ceramic capacitor</h2>
+        <p>Ceramic disc capacitor.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('100nF ceramic capacitor', 0)">+</button>
+        <span class="counter" id="counter-100nF ceramic capacitor">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('100nF ceramic capacitor')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="1K Pot">
+        <h2>1K Pot</h2>
+        <p>1kΩ potentiometer.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('1K Pot', 0)">+</button>
+        <span class="counter" id="counter-1K Pot">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('1K Pot')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="7 SEGMENT DISPLAY">
+        <h2>7 SEGMENT DISPLAY</h2>
+        <p>Single 7-seg numeric display.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('7 SEGMENT DISPLAY', 0)">+</button>
+        <span class="counter" id="counter-7 SEGMENT DISPLAY">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('7 SEGMENT DISPLAY')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="74LS00">
+        <h2>74LS00</h2>
+        <p>Quad 2-input NAND gates.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('74LS00', 0)">+</button>
+        <span class="counter" id="counter-74LS00">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('74LS00')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="74LS04">
+        <h2>74LS04</h2>
+        <p>Hex inverter gates.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('74LS04', 0)">+</button>
+        <span class="counter" id="counter-74LS04">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('74LS04')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="74LS85">
+        <h2>74LS85</h2>
+        <p>4-bit magnitude comparator.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('74LS85', 0)">+</button>
+        <span class="counter" id="counter-74LS85">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('74LS85')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="74LS83">
+        <h2>74LS83</h2>
+        <p>4-bit binary full adder.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('74LS83', 0)">+</button>
+        <span class="counter" id="counter-74LS83">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('74LS83')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="72LS47">
+        <h2>72LS47</h2>
+        <p>BCD to 7-segment decoder/driver.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('72LS47', 0)">+</button>
+        <span class="counter" id="counter-72LS47">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('72LS47')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="74LS163">
+        <h2>74LS163</h2>
+        <p>4-bit synchronous counter.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('74LS163', 0)">+</button>
+        <span class="counter" id="counter-74LS163">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('74LS163')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="Quad op amp LF 347">
+        <h2>Quad op amp LF 347</h2>
+        <p>Quad operational amplifier.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('Quad op amp LF 347', 0)">+</button>
+        <span class="counter" id="counter-Quad op amp LF 347">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Quad op amp LF 347')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="1m Single Strand Wires (R,B,B,G,Y)">
+        <h2>1m Single Strand Wires (R,B,B,G,Y)</h2>
+        <p>Single strand hookup wires, assorted colors.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('1m Single Strand Wires (R,B,B,G,Y)', 0)">+</button>
+        <span class="counter" id="counter-1m Single Strand Wires (R,B,B,G,Y)">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('1m Single Strand Wires (R,B,B,G,Y)')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="KEPPER 66 BOX">
+        <h2>KEPPER 66 BOX</h2>
+        <p>Component storage box.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('KEPPER 66 BOX', 0)">+</button>
+        <span class="counter" id="counter-KEPPER 66 BOX">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('KEPPER 66 BOX')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="MULTI STRAND WIRE">
+        <h2>MULTI STRAND WIRE</h2>
+        <p>Flexible multi-strand wire.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('MULTI STRAND WIRE', 0)">+</button>
+        <span class="counter" id="counter-MULTI STRAND WIRE">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('MULTI STRAND WIRE')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="COTTON BOX">
+        <h2>COTTON BOX</h2>
+        <p>Protective cotton packing box.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('COTTON BOX', 0)">+</button>
+        <span class="counter" id="counter-COTTON BOX">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('COTTON BOX')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="ZIP LOCK COVER">
+        <h2>ZIP LOCK COVER</h2>
+        <p>Zip-lock bag for components.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('ZIP LOCK COVER', 0)">+</button>
+        <span class="counter" id="counter-ZIP LOCK COVER">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('ZIP LOCK COVER')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="COURIER">
+        <h2>COURIER</h2>
+        <p>Courier/handling charge.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('COURIER', 0)">+</button>
+        <span class="counter" id="counter-COURIER">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('COURIER')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="MAN POWER">
+        <h2>MAN POWER</h2>
+        <p>Labour/service cost.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('MAN POWER', 0)">+</button>
+        <span class="counter" id="counter-MAN POWER">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('MAN POWER')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="74LS157">
+        <h2>74LS157</h2>
+        <p>Quad 2-to-1 data multiplexer.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('74LS157', 0)">+</button>
+        <span class="counter" id="counter-74LS157">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('74LS157')">-</button>
+    </div>
+
+    <div class="listing">
+        <img src="" alt="Cd40106">
+        <h2>Cd40106</h2>
+        <p>Hex Schmitt trigger inverter.</p>
+        <p class="price">₹0</p>
+        <button class="btn" onclick="addToCart('Cd40106', 0)">+</button>
+        <span class="counter" id="counter-Cd40106">0</span>
+        <button class="btn btn-remove" onclick="removeFromCart('Cd40106')">-</button>
     </div>
 
 </div>
@@ -384,4 +662,3 @@ window.onload = loadCounters;
 </script>
 </body>
 </html>
-
