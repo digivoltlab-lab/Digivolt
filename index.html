@@ -13,11 +13,13 @@
     .listing h2 { margin: 0 0 10px; }
     .listing p { margin: 0 0 10px; }
     .price { color: green; font-weight: bold; }
-    .btn { display: inline-block; padding: 10px 20px; background: #4facfe; color: white; text-decoration: none; border-radius: 5px; cursor: pointer; }
+    .btn { display: inline-block; padding: 8px 14px; background: #4facfe; color: white; text-decoration: none; border-radius: 5px; cursor: pointer; border: none; }
     .btn:hover { background: #3a8fd0; }
     .buy-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: #ff9800; }
     .buy-btn:hover { background: #e68900; }
-    .counter { display: inline-block; background: red; color: white; padding: 5px 10px; margin-left: 10px; border-radius: 50%; font-weight: bold; }
+    .counter { display: inline-block; background: #2196F3; color: white; padding: 5px 10px; margin-left: 15px; border-radius: 50%; font-weight: bold; min-width: 28px; text-align: center; }
+    .btn-remove { background: #f44336; margin-left: 5px; }
+    .btn-remove:hover { background: #d32f2f; }
 </style>
 </head>
 <body>
@@ -32,7 +34,8 @@
         <h2>Arduino Uno R3</h2>
         <p>High-quality microcontroller board for electronics projects.</p>
         <p class="price">₹550</p>
-        <button class="btn" onclick="addToCart('Arduino Uno R3', 550, this)">Add to Cart</button>
+        <button class="btn" onclick="addToCart('Arduino Uno R3', 550)">+</button>
+        <button class="btn btn-remove" onclick="removeFromCart('Arduino Uno R3')">-</button>
         <span class="counter" id="counter-Arduino Uno R3">0</span>
     </div>
 
@@ -40,7 +43,8 @@
         <h2>Raspberry Pi 4</h2>
         <p>Mini computer for coding, IoT, and robotics.</p>
         <p class="price">₹4200</p>
-        <button class="btn" onclick="addToCart('Raspberry Pi 4', 4200, this)">Add to Cart</button>
+        <button class="btn" onclick="addToCart('Raspberry Pi 4', 4200)">+</button>
+        <button class="btn btn-remove" onclick="removeFromCart('Raspberry Pi 4')">-</button>
         <span class="counter" id="counter-Raspberry Pi 4">0</span>
     </div>
 
@@ -48,7 +52,8 @@
         <h2>Resisters (1k), 100 pcs</h2>
         <p>Pack of resistors for electronics projects.</p>
         <p class="price">₹109</p>
-        <button class="btn" onclick="addToCart('Resisters (1k), 100 pcs', 109, this)">Add to Cart</button>
+        <button class="btn" onclick="addToCart('Resisters (1k), 100 pcs', 109)">+</button>
+        <button class="btn btn-remove" onclick="removeFromCart('Resisters (1k), 100 pcs')">-</button>
         <span class="counter" id="counter-Resisters (1k), 100 pcs">0</span>
     </div>
 
@@ -56,7 +61,8 @@
         <h2>ESP8266 WiFi Module</h2>
         <p>Wireless module for IoT projects.</p>
         <p class="price">₹250</p>
-        <button class="btn" onclick="addToCart('ESP8266 WiFi Module', 250, this)">Add to Cart</button>
+        <button class="btn" onclick="addToCart('ESP8266 WiFi Module', 250)">+</button>
+        <button class="btn btn-remove" onclick="removeFromCart('ESP8266 WiFi Module')">-</button>
         <span class="counter" id="counter-ESP8266 WiFi Module">0</span>
     </div>
 
@@ -73,7 +79,7 @@ function loadCounters() {
     });
 }
 
-function addToCart(productName, price, btn) {
+function addToCart(productName, price) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let existingItem = cart.find(item => item.name === productName);
 
@@ -87,7 +93,22 @@ function addToCart(productName, price, btn) {
     document.getElementById('counter-' + productName).textContent = existingItem ? existingItem.quantity : 1;
 }
 
+function removeFromCart(productName) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let existingItem = cart.find(item => item.name === productName);
+
+    if (existingItem && existingItem.quantity > 0) {
+        existingItem.quantity -= 1;
+        if (existingItem.quantity === 0) {
+            cart = cart.filter(item => item.name !== productName);
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        document.getElementById('counter-' + productName).textContent = existingItem.quantity > 0 ? existingItem.quantity : 0;
+    }
+}
+
 window.onload = loadCounters;
 </script>
 </body>
 </html>
+
