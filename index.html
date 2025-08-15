@@ -30,12 +30,12 @@
         font-size: 16px;
     }
     .container { 
-        max-width: 1200px; 
-        margin: auto; 
+        max-width: 100%; 
         padding: 20px; 
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        display: flex;
         gap: 20px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
     }
     .listing { 
         background: white; 
@@ -45,6 +45,7 @@
         border-left: 5px solid #4cafef; 
         transition: transform 0.2s;
         text-align: center;
+        flex: 0 0 250px;
     }
     .listing:hover { transform: scale(1.02); border-left-color: #00c853; }
     .listing img {
@@ -125,7 +126,6 @@
 </header>
 
 <div class="container" id="product-list">
-
     <div class="listing">
         <img src="Arduino.jpg.jpg" alt="Arduino Uno R3">
         <h2>Arduino Uno R3</h2>
@@ -149,7 +149,6 @@
             <button class="btn btn-remove" onclick="removeFromCart('Raspberry Pi 0')">-</button>
         </div>
     </div>
-
 </div>
 
 <script>
