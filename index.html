@@ -17,6 +17,7 @@
     .btn:hover { background: #3a8fd0; }
     .buy-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: #ff9800; }
     .buy-btn:hover { background: #e68900; }
+    .counter { display: inline-block; background: red; color: white; padding: 5px 10px; margin-left: 10px; border-radius: 50%; font-weight: bold; }
 </style>
 </head>
 <body>
@@ -31,46 +32,62 @@
         <h2>Arduino Uno R3</h2>
         <p>High-quality microcontroller board for electronics projects.</p>
         <p class="price">₹550</p>
-        <button class="btn" onclick="addToCart('Arduino Uno R3', 550)">Add to Cart</button>
+        <button class="btn" onclick="addToCart('Arduino Uno R3', 550, this)">Add to Cart</button>
+        <span class="counter" id="counter-Arduino Uno R3">0</span>
     </div>
 
     <div class="listing">
         <h2>Raspberry Pi 4</h2>
         <p>Mini computer for coding, IoT, and robotics.</p>
         <p class="price">₹4200</p>
-        <button class="btn" onclick="addToCart('Raspberry Pi 4', 4200)">Add to Cart</button>
+        <button class="btn" onclick="addToCart('Raspberry Pi 4', 4200, this)">Add to Cart</button>
+        <span class="counter" id="counter-Raspberry Pi 4">0</span>
     </div>
 
     <div class="listing">
         <h2>Resisters (1k), 100 pcs</h2>
         <p>Pack of resistors for electronics projects.</p>
         <p class="price">₹109</p>
-        <button class="btn" onclick="addToCart('Resisters (1k), 100 pcs', 109)">Add to Cart</button>
+        <button class="btn" onclick="addToCart('Resisters (1k), 100 pcs', 109, this)">Add to Cart</button>
+        <span class="counter" id="counter-Resisters (1k), 100 pcs">0</span>
     </div>
 
     <div class="listing">
         <h2>ESP8266 WiFi Module</h2>
         <p>Wireless module for IoT projects.</p>
         <p class="price">₹250</p>
-        <button class="btn" onclick="addToCart('ESP8266 WiFi Module', 250)">Add to Cart</button>
+        <button class="btn" onclick="addToCart('ESP8266 WiFi Module', 250, this)">Add to Cart</button>
+        <span class="counter" id="counter-ESP8266 WiFi Module">0</span>
     </div>
 
 </div>
 
 <script>
-function addToCart(productName, price) {
+function loadCounters() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.forEach(item => {
+        let counterEl = document.getElementById('counter-' + item.name);
+        if (counterEl) {
+            counterEl.textContent = item.quantity;
+        }
+    });
+}
+
+function addToCart(productName, price, btn) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let existingItem = cart.find(item => item.name === productName);
 
     if (existingItem) {
-        existingItem.quantity += 1; // Agar same item hai to quantity badhao
+        existingItem.quantity += 1;
     } else {
-        cart.push({ name: productName, price: price, quantity: 1 }); // Naya item add karo
+        cart.push({ name: productName, price: price, quantity: 1 });
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));
-    alert(productName + " added to cart!");
+    document.getElementById('counter-' + productName).textContent = existingItem ? existingItem.quantity : 1;
 }
+
+window.onload = loadCounters;
 </script>
 </body>
 </html>
