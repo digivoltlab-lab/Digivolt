@@ -1,3 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Your Cart</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f8f8f8;
+        margin: 0;
+        padding: 20px;
+    }
+    h2 {
+        text-align: center;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+    }
+    th, td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+    }
+    th {
+        background: #007acc;
+        color: white;
+    }
+    img {
+        max-width: 60px;
+    }
+    button {
+        padding: 4px 8px;
+        margin: 0 2px;
+        border: none;
+        background: #007acc;
+        color: white;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #005f99;
+    }
+    .delete-btn {
+        background: red;
+    }
+    .delete-btn:hover {
+        background: darkred;
+    }
+    .total {
+        text-align: right;
+        font-weight: bold;
+        margin-top: 10px;
+        font-size: 18px;
+    }
+    .place-order {
+        display: block;
+        width: 100%;
+        background: green;
+        color: white;
+        padding: 12px;
+        border: none;
+        font-size: 18px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<h2>Your Cart</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="cartTable">
+        <!-- Items will load here -->
+    </tbody>
+</table>
+
+<div class="total" id="cartTotal">Total: ₹0</div>
+<button class="place-order">Place Order</button>
+
 <script>
 const productImages = {
     "Arduino Uno R3": "Arduino.jpg.jpg",
@@ -7,31 +98,23 @@ const productImages = {
 function loadCart() {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let table = document.getElementById('cartTable');
+    table.innerHTML = "";
     let total = 0;
 
     cart.forEach(item => {
         let row = table.insertRow();
-        let imgCell = row.insertCell(0);
-        let nameCell = row.insertCell(1);
-        let qtyCell = row.insertCell(2);
-        let priceCell = row.insertCell(3);
-        let totalCell = row.insertCell(4);
-        let actionCell = row.insertCell(5);
-
-        imgCell.innerHTML = `<img src="${productImages[item.name] || 'placeholder.jpg'}" alt="${item.name}" width="60">`;
-        nameCell.textContent = item.name;
-
-        // Quantity with + - buttons
-        qtyCell.innerHTML = `
-            <button onclick="changeQty('${item.name}', -1)">-</button>
-            ${item.quantity}
-            <button onclick="changeQty('${item.name}', 1)">+</button>
+        row.innerHTML = `
+            <td><img src="${productImages[item.name] || 'placeholder.jpg'}" alt="${item.name}"></td>
+            <td>${item.name}</td>
+            <td>
+                <button onclick="changeQty('${item.name}', -1)">-</button>
+                ${item.quantity}
+                <button onclick="changeQty('${item.name}', 1)">+</button>
+            </td>
+            <td>₹${item.price}</td>
+            <td>₹${item.price * item.quantity}</td>
+            <td><button class="delete-btn" onclick="removeItem('${item.name}')">❌</button></td>
         `;
-
-        priceCell.textContent = `₹${item.price}`; // single piece price
-        totalCell.textContent = `₹${item.price * item.quantity}`;
-        actionCell.innerHTML = `<button onclick="removeItem('${item.name}')">❌</button>`;
-
         total += item.price * item.quantity;
     });
 
@@ -43,20 +126,23 @@ function changeQty(name, change) {
     cart = cart.map(item => {
         if (item.name === name) {
             item.quantity += change;
-            if (item.quantity < 1) item.quantity = 1; // minimum 1
+            if (item.quantity < 1) item.quantity = 1;
         }
         return item;
     });
     localStorage.setItem('cart', JSON.stringify(cart));
-    location.reload();
+    loadCart();
 }
 
 function removeItem(name) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     cart = cart.filter(item => item.name !== name);
     localStorage.setItem('cart', JSON.stringify(cart));
-    location.reload();
+    loadCart();
 }
 
 window.onload = loadCart;
 </script>
+
+</body>
+</html>
